@@ -10,33 +10,33 @@
 	<script src="/static/js/script.js" defer></script>	
     <title>Document</title>
 </head>
-<body>
-    <div id="nav">
-        <div id="nav-wrapper">
-            <div id="nav-logo">
+
+<header>
+    <div>
+        <nav class="navbar">
+            <div class="navbar_logo">
                 <a href="/"><img src="/static/img/logo.png" alt="logo"></a>
             </div>
-            <div id="nav-links">
-                <div><a href="/login">Login</a></div>
-                <div><a href="/calendar">Calendar</a></div>
-                <div>
-                    <div class = "dropdown">
-                        <a class = "dropbtn" > Tasks <i class = "material-icons" style = "font-size:16px"> arrow_drop_down</i></a>
-                        <div class="dropdown-content">
-                            <a href = "/school">School</a>
-                            <a href = "/personal">Personal</a>
-                            <a href = "/today">Today</a>
-                        </div>
+            <div class="navbar_links">
+                <a href="/login">Login</a>
+                <a href="/calendar">Calendar</a>
+                <div class="dropdown">
+                    <a class="dropbtn">Tasks <i class="material-icons" style="font-size:16px"> arrow_drop_down</i></a>
+                    <div class="dropdown-content">
+                        <a href="/school">School</a>
+                        <a href="/personal">Personal</a>
+                        <a href="/today">Today</a>
                     </div>
                 </div>
-                <div><a href="/profile">Profile</a></div>
+                <a href="/profile">Profile</a>
             </div>
         </div>
-    </div>
-    <div id = "main">
+</header>
+<body>
+    <div class = "main">
         {% block content %}{% endblock %}
     </div>
-    <footer> Stuff</footer>
+    <footer> Footer!!</footer>
     
 </body>
 </html>
