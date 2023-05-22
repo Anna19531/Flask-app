@@ -41,11 +41,41 @@
 	</form>
 	</div>
 
-
-  .main{
-  margin-left: 30px;
-  align-self: center;
-}
+	<table class="w3-table w3-striped">
+		<tr>
+			<th>
+				Event
+			</th>
+			<th>
+				Description
+			</th>
+			<th>
+				Date
+			</th>
+			<th>
+				Colour
+			</th>
+		</tr>
+		<tr>
+			{% for event in events %}
+			<td>
+				{{ event.name }}
+			</td>
+			<td>
+				{{ event.description }}
+			</td>
+			<td>
+				{{ event.date }}
+			</td>
+			<td>
+				{{ event.colour }}
+			</td>
+			<td>
+				<button class="open-button" onclick="openForm()">Edit</button>
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
 	
 </body>
 </html>
