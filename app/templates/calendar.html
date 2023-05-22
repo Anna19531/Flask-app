@@ -27,7 +27,25 @@
 		</div>
 	</div>
 
+	<button class="open-button" onclick="openForm()">Add Event</button>
 
+	<div class = "form-popup" id = "myForm">
+	<form method="POST" action="/calendar" class = "form-container">
+		{{ form.csrf_token }}
+		{{ form.name.label }} {{ form.name(size=20) }}
+		{{ form.description.label }} {{ form.description(size=50) }}
+		{{ form.date.label }} {{ form.date }}
+		{{ form.colour.label }} {{ form.colour(size=20) }}
+		<input type="submit" value="Save">
+		<button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+	</form>
+	</div>
+
+
+  .main{
+  margin-left: 30px;
+  align-self: center;
+}
 	
 </body>
 </html>
