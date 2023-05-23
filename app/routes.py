@@ -2,7 +2,7 @@ import sys
 from flask import render_template, request, redirect, url_for, session, flash, make_response
 from app import app, db
 from app.models import Event
-from app.forms import EventForm, EditEventForm
+from app.forms import EventForm
 from app import models
 
 
@@ -14,6 +14,7 @@ def index():
 @app.route("/calendar", methods=["GET", "POST"])
 def calendar():
     form = EventForm()
+    form.colour.choices = [(1, "Red"), (2, "Blue"), (3, "Green"), (4, "Yellow"), (5, "Orange"), (6, "Purple"), (7, "Black")]
     events = Event.query.all()
     if form.validate_on_submit():
         new_event = models.Event()
