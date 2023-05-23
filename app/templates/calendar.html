@@ -32,10 +32,11 @@
 	<div class = "form-popup" id = "myForm">
 	<form method="POST" action="/calendar" class = "form-container">
 		{{ form.csrf_token }}
-		{{ form.name.label }} {{ form.name(size=20) }}
+		{{ form.name.label }} {{ form.name(size=20) }} 
 		{{ form.description.label }} {{ form.description(size=50) }}
 		{{ form.date.label }} {{ form.date }}
 		{{ form.colour.label }} {{ form.colour(size=20) }}
+		<input type = "hidden" name = "action" value = "add">
 		<input type="submit" value="Save">
 		<button type="button" class="btn cancel" onclick="closeForm()">Close</button>
 	</form>
@@ -55,6 +56,9 @@
 			<th>
 				Colour
 			</th>
+			<th>
+				Edit?
+			</th>
 		</tr>
 		<tr>
 			{% for event in events %}
@@ -70,13 +74,27 @@
 			<td>
 				{{ event.colour }}
 			</td>
-			<td>
-				<button class="open-button" onclick="openForm()">Edit</button>
+			<td> 
+				<button class="open" onclick="openEditForm()">Edit</button>
+				<div class = "form-popup" id = "myEditForm">
+					<form method="POST" action="/calendar" class = "form-container">
+						{{ form.csrf_token }}
+						{{ form.name.label }} {{ form.name }}
+						{{ form.description.label }} {{ form.description(size=50) }}
+						{{ form.date.label }} {{ form.date }} 
+						{{ form.colour.label }} {{ form.colour }}
+						<input type = "hidden" name = "action" value = "edit">
+						<input type = "hidden" name = id value = "{{ event.id }}"> 
+						<input type="submit" value="Save">
+						<button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+					</form>
+				</div>
 			</td>
 		</tr>
 		{% endfor %}
 	</table>
 	
+
 </body>
 </html>
 

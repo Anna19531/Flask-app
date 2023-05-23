@@ -16,16 +16,28 @@ def calendar():
     form = EventForm()
     form.colour.choices = [(1, "Red"), (2, "Blue"), (3, "Green"), (4, "Yellow"), (5, "Orange"), (6, "Purple"), (7, "Black")]
     events = Event.query.all()
-    if form.validate_on_submit():
-        new_event = models.Event()
-        new_event.name = form.name.data
-        new_event.description = form.description.data
-        new_event.date = form.date.data
-        new_event.colour = form.colour.data
-        db.session().add(new_event)
-        db.session().commit()
-        msg = "OK" if new_event else sys.last_value
-        return make_response(msg, 200)
+    if request.method  == "POST":
+        action = request.form["action"]
+        if action == "add":
+            print("add")
+            new_event = models.Event()
+            new_event.name = form.name.data
+            new_event.description = form.description.data
+            new_event.date = form.date.data
+            new_event.colour = form.colour.data
+            db.session().add(new_event)
+            db.session().commit()
+            msg = "OK" if new_event else sys.last_value
+            return make_response(msg, 200)
+        elif action == "edit":
+            print("edit")
+            id = request.form["id"]
+            event = Event.query.get(id)
+            event.name = form.name.data
+            event.description = form.description.data
+            event.date = form.date.data
+            event.colour = form.colour.data
+            db.session().commit()
     return render_template("calendar.html", form=form, events=events)
 
 

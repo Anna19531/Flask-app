@@ -52,6 +52,10 @@ function openForm() {
   document.getElementById("myForm").style.display = "block";
 }
 
+function openEditForm() {
+    document.getElementById("myEditForm").style.display = "block";
+  }
+
 function closeForm() {
   document.getElementById("myForm").style.display = "none";
 }
