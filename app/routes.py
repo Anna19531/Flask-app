@@ -38,6 +38,12 @@ def calendar():
             event.date = form.date.data
             event.colour = form.colour.data
             db.session().commit()
+        elif action == "delete":
+            print("delete")
+            id = request.form["id"]
+            event = Event.query.get(id)
+            db.session.delete(event)
+            db.session().commit()
     return render_template("calendar.html", form=form, events=events)
 
 
