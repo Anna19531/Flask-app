@@ -82,10 +82,10 @@
 				<div class = "form-popup" id = "myEditForm">
 					<form method="POST" action="/calendar" class = "form-container">
 						{{ form.csrf_token }}
-						{{ form.name.label }} {{ form.name }}
-						{{ form.description.label }} {{ form.description(size=50) }}
-						{{ form.date.label }} {{ form.date }} 
-						{{ form.colour.label }} {{ form.colour }}
+						{{ form.name.label }} {{ form.name(value = event.name) }}
+						{{ form.description.label }} {{ form.description(size=50, value = event.description) }}
+						{{ form.date.label }} {{ form.date(value = event.date)}} 
+						{{ form.colour.label }} {{ form.colour(value = event.colour) }}
 						<input type = "hidden" name = "action" value = "edit">
 						<input type = "hidden" name = id value = "{{ event.id }}"> 
 						<input type="submit" value="Save">
