@@ -1,11 +1,11 @@
 import sys
 import json
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import inspect
+from sqlalchemy import inspect, desc
 from flask import render_template, request, redirect, url_for, session, flash, make_response, jsonify
 from app import app, db
 from app.models import Event, Task
-from app.forms import EventForm, TaskForm
+from app.forms import EventForm, TaskForm, TodayForm
 from app import models
 
     
@@ -68,7 +68,7 @@ def school_task():
     #choices for the dropdown menu
     form.type.choices = [(1, "School"), (2, "Personal")]
     form.event.choices = [(event.id, event.name) for event in Event.query.all()]
-    tasks = Task.query.all()
+    tasks = Task.query.filter_by(type = "1").order_by(Task.date).all()
     if request.method  == "POST":
         action = request.form["action"]
         if action == "add":
@@ -79,6 +79,7 @@ def school_task():
             new_task.date = form.date.data
             new_task.type = form.type.data
             new_task.event_id = form.event.data
+            new_task.hours = form.hours.data
             db.session().add(new_task)
             db.session().commit()
             msg = "OK" if new_task else sys.last_value
@@ -92,6 +93,7 @@ def school_task():
             task.date = form.date.data
             task.type = form.type.data
             task.event_id = form.event.data
+            task.hours = form.hours.data
             db.session().commit()
         elif action == "delete":
             print("delete")
@@ -108,7 +110,7 @@ def personal_task():
     #choices for the dropdown menu
     form.type.choices = [(1, "School"), (2, "Personal")]
     form.event.choices = [(event.id, event.name) for event in Event.query.all()]
-    tasks = Task.query.all()
+    tasks = Task.query.filter_by(type = "2").order_by(Task.date).all()
     if request.method  == "POST":
         action = request.form["action"]
         if action == "add":
@@ -119,6 +121,7 @@ def personal_task():
             new_task.date = form.date.data
             new_task.type = form.type.data
             new_task.event_id = form.event.data
+            new_task.hours = form.hours.data
             db.session().add(new_task)
             db.session().commit()
             msg = "OK" if new_task else sys.last_value
@@ -132,6 +135,7 @@ def personal_task():
             task.date = form.date.data
             task.type = form.type.data
             task.event_id = form.event.data
+            task.hours = form.hours.data
             db.session().commit()
         elif action == "delete":
             print("delete")
@@ -144,7 +148,25 @@ def personal_task():
 
 @app.route("/today", methods=["GET", "POST"])
 def today():
-    return render_template("today.html")
+    form = TodayForm()
+    school_time = 0
+    personal_time = 0
+    school_tasks = []
+    personal_tasks = []
+    if request.method == "POST":
+        school_hours = form.school.data
+        personal_hours = form.personal.data
+        print(school_hours)
+        for task in Task.query.order_by(Task.date).all():
+            if task.type == "1":
+                if school_time + task.hours <= school_hours:
+                    school_time += task.hours
+                    school_tasks.append(task)
+            else:
+                if personal_time + task.hours <= personal_hours:
+                    personal_time += task.hours
+                    personal_tasks.append(task)
+    return render_template("today.html", form=form, school_tasks=school_tasks, personal_tasks=personal_tasks)
 
 
 @app.route("/profile", methods=["GET", "POST"])

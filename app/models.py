@@ -14,5 +14,6 @@ class Task(db.Model):
     description = db.Column(db.String(144), nullable=False)
     date = db.Column(db.Date)
     type = db.Column(db.String(144), nullable=False)
+    hours = db.Column(db.Integer, nullable=False)
     #category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'))

@@ -1,12 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+{% extends "layout.html" %}
+{% block content %}
 <body>
+    <form method = "POST" action = "/today">
+        {{ form.csrf_token }}
+        {{ form.school.label }} {{ form.school }}
+        {{ form.personal.label }} {{ form.personal }}
+        <input type="submit" value="Submit">
+    </form>
     
+<h2> Todays Tasks</h2>
+<h4> School </h4>
+    <table>
+        <tr>
+            <th>Task</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Event</th>
+            <th>Hours</th>
+        </tr>
+        {% for task in school_tasks %}
+        <tr>
+            <td>{{ task.name }}</td>
+            <td>{{ task.description }}</td>
+            <td>{{ task.date }}</td>
+            <td>{{ task.type }}</td>
+            <td>{{ task.event }}</td>
+            <td>{{ task.hours }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+<h4> Personal </h4>
+    <table>
+        <tr>
+            <th>Task</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Event</th>
+            <th>Hours</th>
+        </tr>
+        {% for task in personal_tasks %}
+        <tr>
+            <td>{{ task.name }}</td>
+            <td>{{ task.description }}</td>
+            <td>{{ task.date }}</td>
+            <td>{{ task.type }}</td>
+            <td>{{ task.event }}</td>
+            <td>{{ task.hours }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>
+{% endblock %}
