@@ -10,6 +10,7 @@
             {{ form.date.label }} {{ form.date }}
             {{ form.type.label }} {{ form.type }}
             {{ form.event.label }} {{ form.event }}
+            {{ form.hours.label }} {{ form.hours }}
             <input type = "hidden" name = "action" value = "add">
             <input type="submit" value="Add">
             <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
@@ -17,6 +18,54 @@
     </div>
 
 <button class="open-button" onclick="openForm()">Add Task</button>
+
+<table>
+    <tr>
+        <th>Task</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Event</th>
+        <th>Hours</th>
+        <th>Edit?</th>
+        <th>Delete?</th>
+    </tr>
+    {% for task in tasks %}
+    <tr>
+        <td>{{ task.name }}</td>
+        <td>{{ task.description }}</td>
+        <td>{{ task.date }}</td>
+        <td>{{ task.type }}</td>
+        <td>{{ task.event }}</td>
+        <td>{{ task.hours }}</td>
+        <td>
+            <button class="open" onclick="openEditForm()">Edit</button>
+				<div class = "form-popup" id = "myEditForm">
+					<form method="POST" action="/school" class = "form-container">
+						{{ form.csrf_token }}
+                        {{ form.name.label }} {{ form.name }}
+                        {{ form.description.label }} {{ form.description(size=50) }}
+                        {{ form.date.label }} {{ form.date }}
+                        {{ form.type.label }} {{ form.type }}
+                        {{ form.event.label }} {{ form.event }}
+                        {{ form.hours.label }} {{ form.hours }}
+						<input type = "hidden" name = "action" value = "edit">
+						<input type = "hidden" name = id value = "{{ task.id }}"> 
+						<input type="submit" value="Save">
+						<button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+					</form>
+				</div>
+        </td>
+        <td>
+            <form method = "POST" action = "/school">
+                <input type = "hidden" name = "action" value = "delete">
+                <input type = "hidden" name = id value = "{{ task.id }}">
+                <button class = "delete" onclick = "return confirm('Are you sure you want to delete this event?');">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
 
 </body>
 
