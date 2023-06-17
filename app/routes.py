@@ -1,12 +1,11 @@
 import sys
-import json
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import inspect, desc
+from sqlalchemy import inspect, func
 from flask import render_template, request, redirect, url_for, session, flash, make_response, jsonify
 from app import app, db
 from app.models import Event, Task
 from app.forms import EventForm, TaskForm, TodayForm
 from app import models
+from datetime import date, datetime, timedelta
 
     
 #convert a sqlalchemy object containing a date object to a dictionary
@@ -68,7 +67,9 @@ def school_task():
     #choices for the dropdown menu
     form.type.choices = [(1, "School"), (2, "Personal")]
     form.event.choices = [(event.id, event.name) for event in Event.query.all()]
-    tasks = Task.query.filter_by(type = "1").order_by(Task.date).all()
+    urgent = Task.query.filter_by(type = "1").filter(Task.date <= date.today() + timedelta(days=3)).order_by(Task.date).all()
+    coming_up = Task.query.filter_by(type = "1").filter(date.today() + timedelta(days=3) < Task.date).filter(Task.date <= date.today() + timedelta(days=7)).order_by(Task.date).all()
+    not_urgent = Task.query.filter_by(type = "1").filter(date.today() + timedelta(days=7) < Task.date).order_by(Task.date).all()
     if request.method  == "POST":
         action = request.form["action"]
         if action == "add":
@@ -101,7 +102,7 @@ def school_task():
             task = Task.query.get(id)
             db.session.delete(task)
             db.session().commit()
-    return render_template("school_task.html", form=form, tasks=tasks)
+    return render_template("school_task.html", form=form, urgent=urgent, coming_up=coming_up, not_urgent=not_urgent)
 
 
 @app.route("/personal", methods=["GET", "POST"])
@@ -110,7 +111,10 @@ def personal_task():
     #choices for the dropdown menu
     form.type.choices = [(1, "School"), (2, "Personal")]
     form.event.choices = [(event.id, event.name) for event in Event.query.all()]
-    tasks = Task.query.filter_by(type = "2").order_by(Task.date).all()
+    #filter Tasks by events that have a date within 3 days of the current date
+    urgent = Task.query.filter_by(type = "2").filter(Task.date <= date.today() + timedelta(days=3)).order_by(Task.date).all()
+    coming_up = Task.query.filter_by(type = "2").filter(date.today() + timedelta(days=3) < Task.date).filter(Task.date <= date.today() + timedelta(days=7)).order_by(Task.date).all()
+    not_urgent = Task.query.filter_by(type = "2").filter(date.today() + timedelta(days=7) < Task.date).order_by(Task.date).all()
     if request.method  == "POST":
         action = request.form["action"]
         if action == "add":
@@ -143,7 +147,7 @@ def personal_task():
             task = Task.query.get(id)
             db.session.delete(task)
             db.session().commit()
-    return render_template("personal_task.html", tasks=tasks, form=form)
+    return render_template("personal_task.html", urgent=urgent, coming_up=coming_up, not_urgent=not_urgent, form=form)
 
 
 @app.route("/today", methods=["GET", "POST"])
