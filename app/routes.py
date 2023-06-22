@@ -1,11 +1,22 @@
 import sys
-from sqlalchemy import inspect, func
+from sqlalchemy import inspect
 from flask import render_template, request, redirect, url_for, session, flash, make_response, jsonify
 from app import app, db
-from app.models import Event, Task
-from app.forms import EventForm, TaskForm, TodayForm
+from app.models import Event, Task, User
+from app.forms import EventForm, TaskForm, TodayForm, Login, CreateAccount
 from app import models
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+
+#login manager
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    # since the user_id is just the primary key of our user table, use it in the query for the user
+    return User.query.get(int(user_id))
 
     
 #convert a sqlalchemy object containing a date object to a dictionary
@@ -19,12 +30,36 @@ def serve_js():
     return jsonify([object_as_dict(event) for event in events])
 
 
-@app.route("/")
-def index():
-    return render_template("login.html")
+@app.route("/", methods = ["GET", "POST"])
+def home():
+    login_form = Login()
+    acc_form = CreateAccount()
+    remember = True if request.form.get('remember') else False
+    if request.method == "POST":
+        action = request.form["login"]
+        if action == "login":
+            user = User.query.filter_by(username = login_form.username.data).first()
+            password = login_form.password.data
+            #check if input password equals the hashed password in the database
+            if user and check_password_hash(user.password, password):
+                login_user(user, remember = remember)
+                flash("Logged in successfully :)")
+                return redirect(url_for("calendar"))
+            else:
+                flash("Incorrect username or password :(")
+        else:
+            new_user = models.User()
+            new_user.username = acc_form.username.data
+            new_user.password = generate_password_hash(acc_form.password.data, method = "sha256")
+            new_user.email = acc_form.email.data
+            db.session().add(new_user)
+            db.session().commit()
+            flash("Account created :)")
+    return render_template("home.html", login_form=login_form, acc_form=acc_form)
 
 
 @app.route("/calendar", methods=["GET", "POST"])
+@login_required
 def calendar():
     form = EventForm()
     #choices for the dropdown menu
@@ -62,6 +97,7 @@ def calendar():
 
 
 @app.route("/school", methods=["GET", "POST"])
+@login_required
 def school_task():
     form = TaskForm()
     #choices for the dropdown menu
@@ -106,6 +142,7 @@ def school_task():
 
 
 @app.route("/personal", methods=["GET", "POST"])
+@login_required
 def personal_task():
     form = TaskForm()
     #choices for the dropdown menu
@@ -151,6 +188,7 @@ def personal_task():
 
 
 @app.route("/today", methods=["GET", "POST"])
+@login_required
 def today():
     form = TodayForm()
     school_time = 0
@@ -174,5 +212,13 @@ def today():
 
 
 @app.route("/profile", methods=["GET", "POST"])
+@login_required
 def profile():
     return render_template("profile.html")
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    flash("Logged out succesfully :)")
+    return redirect("/")

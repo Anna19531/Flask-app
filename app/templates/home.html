@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <p> Login </p>
+    <form method = "POST" action = "/">
+        {{ login_form.csrf_token }}
+        {{ login_form.username.label }} {{ login_form.username }}
+        {{ login_form.password.label }} {{ login_form.password }}
+        <input type="submit" value="Submit">
+        <input type="hidden" value = "login" name = "login">
+    </form>
+
+    <p> Create Account </p>
+    <form method = "POST" action = "/">
+        {{ acc_form.csrf_token }}
+        {{ acc_form.username.label }} {{ acc_form.username }}
+        {{ acc_form.password.label }} {{ acc_form.password }}
+        {{ acc_form.email.label }} {{ acc_form.email }}
+        <input type="submit" value="Submit">
+        <input type="hidden" value = "acc" name = "login">
+    </form>
+</body>
+
+{% endblock %}

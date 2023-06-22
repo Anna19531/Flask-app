@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from app.models import Event
-from wtforms import IntegerField, TextAreaField, SelectField, validators, StringField, DateField
+from wtforms import IntegerField, SelectField, validators, StringField, DateField, EmailField, PasswordField
 from wtforms.validators import Optional, ValidationError, DataRequired
 
 # form to add events
@@ -35,6 +35,14 @@ class TodayForm(FlaskForm):
     school = IntegerField("School", [validators.NumberRange(min=0, max=24)])
     personal = IntegerField("Personal", [validators.NumberRange(min=0, max=24)])
 
+class Login(FlaskForm):
+    username = StringField("username: ", validators=[DataRequired()])
+    password = PasswordField("password: ", validators=[DataRequired()])
 
+class CreateAccount(FlaskForm):
+    username = StringField("username: ", validators=[DataRequired()])
+    password = PasswordField("password: ", validators=[DataRequired()])
+    password2 = PasswordField("password again: ", validators=[DataRequired()])
+    email = EmailField("email: ", validators=[DataRequired()])
 
 

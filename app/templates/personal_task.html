@@ -52,12 +52,12 @@
 				<div class = "form-popup" id = "myEditForm">
 					<form method="POST" action="/personal" class = "form-container">
 						{{ form.csrf_token }}
-                        {{ form.name.label }} {{ form.name }}
-                        {{ form.description.label }} {{ form.description(size=50) }}
-                        {{ form.date.label }} {{ form.date }}
-                        {{ form.type.label }} {{ form.type }}
-                        {{ form.event.label }} {{ form.event }}
-                        {{ form.hours.label }} {{ form.hours }}
+                        {{ form.name.label }} {{ form.name(value = task.name) }}
+                        {{ form.description.label }} {{ form.description(value = task.description) }}
+                        {{ form.date.label }} {{ form.date(value = task.date) }}
+                        {{ form.type.label }} {{ form.type(value = task.type) }}
+                        {{ form.event.label }} {{ form.event(value = task.event) }}
+                        {{ form.hours.label }} {{ form.hours(value = task.hours) }}
 						<input type = "hidden" name = "action" value = "edit">
 						<input type = "hidden" name = id value = "{{ task.id }}"> 
 						<input type="submit" value="Save">
@@ -101,12 +101,12 @@
 				<div class = "form-popup" id = "myEditForm">
 					<form method="POST" action="/personal" class = "form-container">
 						{{ form.csrf_token }}
-                        {{ form.name.label }} {{ form.name }}
-                        {{ form.description.label }} {{ form.description(size=50) }}
-                        {{ form.date.label }} {{ form.date }}
-                        {{ form.type.label }} {{ form.type }}
-                        {{ form.event.label }} {{ form.event }}
-                        {{ form.hours.label }} {{ form.hours }}
+                        {{ form.name.label }} {{ form.name(value = task.name) }}
+                        {{ form.description.label }} {{ form.description(value = task.description) }}
+                        {{ form.date.label }} {{ form.date(value = task.date) }}
+                        {{ form.type.label }} {{ form.type(value = task.type) }}
+                        {{ form.event.label }} {{ form.event(value = task.event) }}
+                        {{ form.hours.label }} {{ form.hours(value = task.hours) }}
 						<input type = "hidden" name = "action" value = "edit">
 						<input type = "hidden" name = id value = "{{ task.id }}"> 
 						<input type="submit" value="Save">
@@ -150,12 +150,12 @@
 				<div class = "form-popup" id = "myEditForm">
 					<form method="POST" action="/personal" class = "form-container">
 						{{ form.csrf_token }}
-                        {{ form.name.label }} {{ form.name }}
-                        {{ form.description.label }} {{ form.description(size=50) }}
-                        {{ form.date.label }} {{ form.date }}
-                        {{ form.type.label }} {{ form.type }}
-                        {{ form.event.label }} {{ form.event }}
-                        {{ form.hours.label }} {{ form.hours }}
+                        {{ form.name.label }} {{ form.name(value = task.name) }}
+                        {{ form.description.label }} {{ form.description(value = task.description) }}
+                        {{ form.date.label }} {{ form.date(value = task.date) }}
+                        {{ form.type.label }} {{ form.type(value = task.type) }}
+                        {{ form.event.label }} {{ form.event(value = task.event) }}
+                        {{ form.hours.label }} {{ form.hours(value = task.hours) }}
 						<input type = "hidden" name = "action" value = "edit">
 						<input type = "hidden" name = id value = "{{ task.id }}"> 
 						<input type="submit" value="Save">
