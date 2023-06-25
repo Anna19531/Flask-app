@@ -44,7 +44,7 @@ def home():
             if user and check_password_hash(user.password, password):
                 login_user(user, remember = remember)
                 flash("Logged in successfully :)")
-                return redirect(url_for("calendar"))
+                return redirect(url_for("today"))
             else:
                 flash("Incorrect username or password :(")
         else:
