@@ -130,6 +130,10 @@ function closeForm() {
   document.getElementById("myForm").style.display = "none";
 }
 
+function closeEditForm() {
+    document.getElementById("myEditForm").style.display = "none";
+  }
+
 /*let events = [];
 
     fetch('/calendar')

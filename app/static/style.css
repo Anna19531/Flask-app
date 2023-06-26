@@ -112,7 +112,7 @@ header .current-date{
   border-color: black;
   cursor: pointer;
   position: fixed;
-  top: 23px;
+  top: 53px;
   right: 28px;
   width: 150px;
   border-radius: 10px;
@@ -135,7 +135,7 @@ header .current-date{
 
 /* Add styles to the form container */
 .form-container {
-  max-width: 300px;
+  max-width: 500px;
   padding: 10px;
   background-color: white;
 }

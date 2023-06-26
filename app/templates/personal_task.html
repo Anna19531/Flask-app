@@ -12,167 +12,177 @@
 <body>
     <div class = "form-popup" id = "myForm">
         <form method="POST" action="/school" class = "form-container">
-            {{ form.csrf_token }}
-            {{ form.name.label }} {{ form.name }}
-            {{ form.description.label }} {{ form.description(size=50) }}
-            {{ form.date.label }} {{ form.date }}
-            {{ form.type.label }} {{ form.type }}
-            {{ form.event.label }} {{ form.event }}
-            {{ form.hours.label }} {{ form.hours }}
+            <div class = "w3-padding-small">{{ form.csrf_token }}</div>
+            <div class = "w3-padding-small">{{ form.name.label }} {{ form.name }}</div>
+            <div class = "w3-padding-small">{{ form.description.label }} {{ form.description(size=50) }}</div>
+            <div class = "w3-padding-small">{{ form.date.label }} {{ form.date }}</div>
+            <div class = "w3-padding-small">{{ form.type.label }} {{ form.type }}</div>
+            <div class = "w3-padding-small">{{ form.event.label }} {{ form.event }}</div>
+            <div class = "w3-padding-small">{{ form.hours.label }} {{ form.hours }}</div>
             <input type = "hidden" name = "action" value = "add">
-            <input type="submit" value="Add">
+            <div class = "w3-padding-small"><input type="submit" value="Add"></div>
             <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
         </form>
     </div>
 
-<button class="open-button" onclick="openForm()">Add Task</button>
+    <br>
+    <br>
+    <br>
 
-<h5>Urgent</h5>
-<table>
-    <tr>
-        <th>Task</th>
-        <th>Description</th>
-        <th>Date</th>
-        <th>Type</th>
-        <th>Event</th>
-        <th>Hours</th>
-        <th>Edit?</th>
-        <th>Delete?</th>
-    </tr>
-    {% for task in urgent %}
-    <tr>
-        <td>{{ task.name }}</td>
-        <td>{{ task.description }}</td>
-        <td>{{ task.date }}</td>
-        <td>{{ task.type }}</td>
-        <td>{{ task.event }}</td>
-        <td>{{ task.hours }}</td>
-        <td>
-            <button class="open" onclick="openEditForm()">Edit</button>
-				<div class = "form-popup" id = "myEditForm">
-					<form method="POST" action="/personal" class = "form-container">
-						{{ form.csrf_token }}
-                        {{ form.name.label }} {{ form.name(value = task.name) }}
-                        {{ form.description.label }} {{ form.description(value = task.description) }}
-                        {{ form.date.label }} {{ form.date(value = task.date) }}
-                        {{ form.type.label }} {{ form.type(value = task.type) }}
-                        {{ form.event.label }} {{ form.event(value = task.event) }}
-                        {{ form.hours.label }} {{ form.hours(value = task.hours) }}
-						<input type = "hidden" name = "action" value = "edit">
-						<input type = "hidden" name = id value = "{{ task.id }}"> 
-						<input type="submit" value="Save">
-						<button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-					</form>
-				</div>
-        </td>
-        <td>
-            <form method = "POST" action = "/personal">
-                <input type = "hidden" name = "action" value = "delete">
-                <input type = "hidden" name = id value = "{{ task.id }}">
-                <button class = "delete" onclick = "return confirm('Are you sure you want to delete this event?');">Delete</button>
-            </form>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+    <button class="open-button" onclick="openForm()">Add Task</button>
 
-<h5>Coming Up</h5>
-<table>
-    <tr>
-        <th>Task</th>
-        <th>Description</th>
-        <th>Date</th>
-        <th>Type</th>
-        <th>Event</th>
-        <th>Hours</th>
-        <th>Edit?</th>
-        <th>Delete?</th>
-    </tr>
-    {% for task in coming_up %}
-    <tr>
-        <td>{{ task.name }}</td>
-        <td>{{ task.description }}</td>
-        <td>{{ task.date }}</td>
-        <td>{{ task.type }}</td>
-        <td>{{ task.event }}</td>
-        <td>{{ task.hours }}</td>
-        <td>
-            <button class="open" onclick="openEditForm()">Edit</button>
-				<div class = "form-popup" id = "myEditForm">
-					<form method="POST" action="/personal" class = "form-container">
-						{{ form.csrf_token }}
-                        {{ form.name.label }} {{ form.name(value = task.name) }}
-                        {{ form.description.label }} {{ form.description(value = task.description) }}
-                        {{ form.date.label }} {{ form.date(value = task.date) }}
-                        {{ form.type.label }} {{ form.type(value = task.type) }}
-                        {{ form.event.label }} {{ form.event(value = task.event) }}
-                        {{ form.hours.label }} {{ form.hours(value = task.hours) }}
-						<input type = "hidden" name = "action" value = "edit">
-						<input type = "hidden" name = id value = "{{ task.id }}"> 
-						<input type="submit" value="Save">
-						<button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-					</form>
-				</div>
-        </td>
-        <td>
-            <form method = "POST" action = "/personal">
-                <input type = "hidden" name = "action" value = "delete">
-                <input type = "hidden" name = id value = "{{ task.id }}">
-                <button class = "delete" onclick = "return confirm('Are you sure you want to delete this event?');">Delete</button>
-            </form>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+    <div class = "w3-card w3-container">
+    <h5>Urgent</h5>
+    <table>
+        <tr>
+            <th>Task</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Event</th>
+            <th>Hours</th>
+            <th>Edit?</th>
+            <th>Delete?</th>
+        </tr>
+        {% for task in urgent %}
+        <tr>
+            <td>{{ task.name }}</td>
+            <td>{{ task.description }}</td>
+            <td>{{ task.date }}</td>
+            <td>{{ task.type }}</td>
+            <td>{{ task.event }}</td>
+            <td>{{ task.hours }}</td>
+            <td>
+                <button class="open" onclick="openEditForm()">Edit</button>
+                    <div class = "form-popup" id = "myEditForm">
+                        <form method="POST" action="/personal" class = "form-container">
+                            {{ form.csrf_token }}
+                            <div class = "w3-padding-small">{{ form.name.label }} {{ form.name(value = task.name) }}</div>
+                            <div class = "w3-padding-small">{{ form.description.label }} {{ form.description(value = task.description) }}</div>
+                            <div class = "w3-padding-small">{{ form.date.label }} {{ form.date(value = task.date) }}</div>
+                            <div class = "w3-padding-small">{{ form.type.label }} {{ form.type(value = task.type) }}</div>
+                            <div class = "w3-padding-small">{{ form.event.label }} {{ form.event(value = task.event) }}</div>
+                            <div class = "w3-padding-small">{{ form.hours.label }} {{ form.hours(value = task.hours) }}</div>
+                            <input type = "hidden" name = "action" value = "edit">
+                            <input type = "hidden" name = id value = "{{ task.id }}"> 
+                            <div class = "w3-padding-small"><input type="submit" value="Save"></div>
+                            <button type="button" class="btn cancel" onclick="closeEditForm()">Close</button>
+                        </form>
+                    </div>
+            </td>
+            <td>
+                <form method = "POST" action = "/personal">
+                    <input type = "hidden" name = "action" value = "delete">
+                    <input type = "hidden" name = id value = "{{ task.id }}">
+                    <button class = "delete" onclick = "return confirm('Are you sure you want to delete this event?');">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
 
-<h5>Not Urgent</h5>
-<table>
-    <tr>
-        <th>Task</th>
-        <th>Description</th>
-        <th>Date</th>
-        <th>Type</th>
-        <th>Event</th>
-        <th>Hours</th>
-        <th>Edit?</th>
-        <th>Delete?</th>
-    </tr>
-    {% for task in not_urgent %}
-    <tr>
-        <td>{{ task.name }}</td>
-        <td>{{ task.description }}</td>
-        <td>{{ task.date }}</td>
-        <td>{{ task.type }}</td>
-        <td>{{ task.event }}</td>
-        <td>{{ task.hours }}</td>
-        <td>
-            <button class="open" onclick="openEditForm()">Edit</button>
-				<div class = "form-popup" id = "myEditForm">
-					<form method="POST" action="/personal" class = "form-container">
-						{{ form.csrf_token }}
-                        {{ form.name.label }} {{ form.name(value = task.name) }}
-                        {{ form.description.label }} {{ form.description(value = task.description) }}
-                        {{ form.date.label }} {{ form.date(value = task.date) }}
-                        {{ form.type.label }} {{ form.type(value = task.type) }}
-                        {{ form.event.label }} {{ form.event(value = task.event) }}
-                        {{ form.hours.label }} {{ form.hours(value = task.hours) }}
-						<input type = "hidden" name = "action" value = "edit">
-						<input type = "hidden" name = id value = "{{ task.id }}"> 
-						<input type="submit" value="Save">
-						<button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-					</form>
-				</div>
-        </td>
-        <td>
-            <form method = "POST" action = "/personal">
-                <input type = "hidden" name = "action" value = "delete">
-                <input type = "hidden" name = id value = "{{ task.id }}">
-                <button class = "delete" onclick = "return confirm('Are you sure you want to delete this event?');">Delete</button>
-            </form>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+    <div class = "w3-card w3-container">
+        <h5>Coming Up</h5>
+        <table>
+            <tr>
+                <th>Task</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Event</th>
+                <th>Hours</th>
+                <th>Edit?</th>
+                <th>Delete?</th>
+            </tr>
+            {% for task in coming_up %}
+            <tr>
+                <td>{{ task.name }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.date }}</td>
+                <td>{{ task.type }}</td>
+                <td>{{ task.event }}</td>
+                <td>{{ task.hours }}</td>
+                <td>
+                    <button class="open" onclick="openEditForm()">Edit</button>
+                        <div class = "form-popup" id = "myEditForm">
+                            <form method="POST" action="/personal" class = "form-container">
+                                {{ form.csrf_token }}
+                                <div class = "w3-padding-small">{{ form.name.label }} {{ form.name(value = task.name) }}</div>
+                                <div class = "w3-padding-small">{{ form.description.label }} {{ form.description(value = task.description) }}</div>
+                                <div class = "w3-padding-small">{{ form.date.label }} {{ form.date(value = task.date) }}</div>
+                                <div class = "w3-padding-small">{{ form.type.label }} {{ form.type(value = task.type) }}</div>
+                                <div class = "w3-padding-small">{{ form.event.label }} {{ form.event(value = task.event) }}</div>
+                                <div class = "w3-padding-small">{{ form.hours.label }} {{ form.hours(value = task.hours) }}</div>
+                                <input type = "hidden" name = "action" value = "edit">
+                                <input type = "hidden" name = id value = "{{ task.id }}"> 
+                                <div class = "w3-padding-small"><input type="submit" value="Save"></div>
+                                <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+                            </form>
+                        </div>
+                </td>
+                <td>
+                    <form method = "POST" action = "/personal">
+                        <input type = "hidden" name = "action" value = "delete">
+                        <input type = "hidden" name = id value = "{{ task.id }}">
+                        <button class = "delete" onclick = "return confirm('Are you sure you want to delete this event?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class = "w3-card w3-container">
+        <h5>Not Urgent</h5>
+        <table>
+            <tr>
+                <th>Task</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Event</th>
+                <th>Hours</th>
+                <th>Edit?</th>
+                <th>Delete?</th>
+            </tr>
+            {% for task in not_urgent %}
+            <tr>
+                <td>{{ task.name }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.date }}</td>
+                <td>{{ task.type }}</td>
+                <td>{{ task.event }}</td>
+                <td>{{ task.hours }}</td>
+                <td>
+                    <button class="open" onclick="openEditForm()">Edit</button>
+                        <div class = "form-popup" id = "myEditForm">
+                            <form method="POST" action="/personal" class = "form-container">
+                                {{ form.csrf_token }}
+                                <div class = "w3-padding-small">{{ form.name.label }} {{ form.name(value = task.name) }}</div>
+                                <div class = "w3-padding-small">{{ form.description.label }} {{ form.description(value = task.description) }}</div>
+                                <div class = "w3-padding-small">{{ form.date.label }} {{ form.date(value = task.date) }}</div>
+                                <div class = "w3-padding-small">{{ form.type.label }} {{ form.type(value = task.type) }}</div>
+                                <div class = "w3-padding-small">{{ form.event.label }} {{ form.event(value = task.event) }}</div>
+                                <div class = "w3-padding-small">{{ form.hours.label }} {{ form.hours(value = task.hours) }}</div>
+                                <input type = "hidden" name = "action" value = "edit">
+                                <input type = "hidden" name = id value = "{{ task.id }}"> 
+                                <div class = "w3-padding-small"><input type="submit" value="Save"></div>
+                                <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+                            </form>
+                        </div>
+                </td>
+                <td>
+                    <form method = "POST" action = "/personal">
+                        <input type = "hidden" name = "action" value = "delete">
+                        <input type = "hidden" name = id value = "{{ task.id }}">
+                        <button class = "delete" onclick = "return confirm('Are you sure you want to delete this event?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 </body>
 
 {% endblock %}

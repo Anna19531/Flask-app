@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<!-- Google Font Link for Icons -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
 	<script src="/static/js/script.js" defer></script>	
@@ -13,25 +14,23 @@
 
 <header>
     <div>
-        <nav class="navbar">
-            <div class="navbar_logo">
-                <a href="/"><img src="/static/img/logo.png" alt="logo"></a>
-            </div>
-            <div class="navbar_links">
-                <a href="/login">Login</a>
-                <a href="/calendar">Calendar</a>
-                <div class="dropdown">
-                    <a class="dropbtn">Tasks <i class="material-icons" style="font-size:16px"> arrow_drop_down</i></a>
-                    <div class="dropdown-content">
-                        <a href="/school">School</a>
-                        <a href="/personal">Personal</a>
-                        <a href="/today">Today</a>
-                        <a href ="/logout">Logout</a>
+        <nav class="navbar w3-bar w3-blue">
+            <!-- <div class="navbar_links"> -->
+                <a href="/calendar" class = "w3-bar-item w3-btn w3-mobile">Calendar</a>
+                <!-- <div class="dropdown"> -->
+                <div class="w3-dropdown-hover">
+                    <!-- Fix the dropdown arrow -->
+                    <a class="dropbtn w3-btn">Tasks <i class="material-icons" style="font-size:16px"> arrow_drop_down</i></a>
+                    <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                        <a href="/school" class = "w3-bar-item w3-button">School</a>
+                        <a href="/personal" class = "w3-bar-item w3-button">Personal</a>
+                        <a href="/today" class = "w3-bar-item w3-button">Today</a>
                     </div>
                 </div>
-                <a href="/profile">Profile</a>
-            </div>
-        </div>
+                <a href="/profile" class = "w3-bar-item w3-btn w3-mobile">Profile</a>
+                <a href="/logout" class = "w3-bar-item w3-btn w3-mobile">Logout</a>
+            <!-- </div> -->
+    </div>
 </header>
 <body>
     <br>
@@ -39,7 +38,7 @@
         {% block content %}{% endblock %}
     </div>
     <br>
-    <footer> Footer!!</footer>
+    <footer class = "w3-container"> Footer!!</footer>
     
 </body>
 </html>
