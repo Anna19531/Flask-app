@@ -210,8 +210,13 @@ def today():
     if request.method == "POST":
         school_hours = form.school.data
         personal_hours = form.personal.data
+        #found a bug where if the user didn't input a value for the hours, it would be NoneType
+        if personal_hours == "NoneType":
+            personal_hours = 0
+        if school_hours == "NoneType":
+            school_hours = 0
         print(school_hours)
-        for task in Task.query.order_by(Task.date).all():
+        for task in Task.query.order_by(Task.date).filter_by(user_id = current_user.id).all():
             if task.type == "1":
                 if school_time + task.hours <= school_hours:
                     school_time += task.hours
