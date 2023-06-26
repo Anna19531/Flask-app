@@ -2,6 +2,17 @@
 {% block content %}
 
 <body>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
     <div class = "form-popup" id = "myForm">
         <form method="POST" action="/school" class = "form-container">
             {{ form.csrf_token }}

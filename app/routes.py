@@ -1,4 +1,3 @@
-import sys
 from sqlalchemy import inspect
 from flask import render_template, request, redirect, url_for, session, flash, make_response, jsonify
 from app import app, db
@@ -64,7 +63,7 @@ def calendar():
     form = EventForm()
     #choices for the dropdown menu
     form.colour.choices = [(1, "Red"), (2, "Blue"), (3, "Green"), (4, "Yellow"), (5, "Orange"), (6, "Purple"), (7, "Black")]
-    events = Event.query.all()
+    events = Event.query.filter_by(user_id = current_user.id).all()
     if request.method  == "POST":
         action = request.form["action"]
         if action == "add":
@@ -74,10 +73,11 @@ def calendar():
             new_event.description = form.description.data
             new_event.date = form.date.data
             new_event.colour = form.colour.data
+            new_event.user_id = current_user.id
             db.session().add(new_event)
             db.session().commit()
-            msg = "OK" if new_event else sys.last_value
-            return make_response(msg, 200)
+            flash("Event added :)")
+            return redirect(url_for("calendar"))
         elif action == "edit":
             print("edit")
             id = request.form["id"]
@@ -86,6 +86,7 @@ def calendar():
             event.description = form.description.data
             event.date = form.date.data
             event.colour = form.colour.data
+            event.user_id = current_user.id
             db.session().commit()
         elif action == "delete":
             print("delete")
@@ -93,6 +94,7 @@ def calendar():
             event = Event.query.get(id)
             db.session.delete(event)
             db.session().commit()
+            return redirect(url_for("calendar"))
     return render_template("calendar.html", form=form, events=events)
 
 
@@ -102,10 +104,10 @@ def school_task():
     form = TaskForm()
     #choices for the dropdown menu
     form.type.choices = [(1, "School"), (2, "Personal")]
-    form.event.choices = [(event.id, event.name) for event in Event.query.all()]
-    urgent = Task.query.filter_by(type = "1").filter(Task.date <= date.today() + timedelta(days=3)).order_by(Task.date).all()
-    coming_up = Task.query.filter_by(type = "1").filter(date.today() + timedelta(days=3) < Task.date).filter(Task.date <= date.today() + timedelta(days=7)).order_by(Task.date).all()
-    not_urgent = Task.query.filter_by(type = "1").filter(date.today() + timedelta(days=7) < Task.date).order_by(Task.date).all()
+    form.event.choices = [(event.id, event.name) for event in Event.query.filter_by(user_id = current_user.id).all()]
+    urgent = Task.query.filter_by(type = "1").filter(Task.date <= date.today() + timedelta(days=3)).filter_by(user_id = current_user.id).order_by(Task.date).all()
+    coming_up = Task.query.filter_by(type = "1").filter(date.today() + timedelta(days=3) < Task.date).filter_by(user_id = current_user.id).filter(Task.date <= date.today() + timedelta(days=7)).order_by(Task.date).all()
+    not_urgent = Task.query.filter_by(type = "1").filter(date.today() + timedelta(days=7) < Task.date).filter_by(user_id = current_user.id).order_by(Task.date).all()
     if request.method  == "POST":
         action = request.form["action"]
         if action == "add":
@@ -117,10 +119,11 @@ def school_task():
             new_task.type = form.type.data
             new_task.event_id = form.event.data
             new_task.hours = form.hours.data
+            new_task.user_id = current_user.id
             db.session().add(new_task)
             db.session().commit()
-            msg = "OK" if new_task else sys.last_value
-            return make_response(msg, 200)
+            flash("Task added :)")
+            return redirect(url_for("school_task"))
         elif action == "edit":
             print("edit")
             id = request.form["id"]
@@ -131,13 +134,17 @@ def school_task():
             task.type = form.type.data
             task.event_id = form.event.data
             task.hours = form.hours.data
+            task.user_id = current_user.id
             db.session().commit()
+            flash("Task edited :)")
         elif action == "delete":
             print("delete")
             id = request.form["id"]
             task = Task.query.get(id)
             db.session.delete(task)
             db.session().commit()
+            flash("Task deleted :)")
+            return redirect(url_for("school_task"))
     return render_template("school_task.html", form=form, urgent=urgent, coming_up=coming_up, not_urgent=not_urgent)
 
 
@@ -147,11 +154,11 @@ def personal_task():
     form = TaskForm()
     #choices for the dropdown menu
     form.type.choices = [(1, "School"), (2, "Personal")]
-    form.event.choices = [(event.id, event.name) for event in Event.query.all()]
-    #filter Tasks by events that have a date within 3 days of the current date
-    urgent = Task.query.filter_by(type = "2").filter(Task.date <= date.today() + timedelta(days=3)).order_by(Task.date).all()
-    coming_up = Task.query.filter_by(type = "2").filter(date.today() + timedelta(days=3) < Task.date).filter(Task.date <= date.today() + timedelta(days=7)).order_by(Task.date).all()
-    not_urgent = Task.query.filter_by(type = "2").filter(date.today() + timedelta(days=7) < Task.date).order_by(Task.date).all()
+    form.event.choices = [(event.id, event.name) for event in Event.query.filter_by(user_id = current_user.id).all()]
+    #filter Tasks by events that have a date within 3 days of the current date and by the user logged in
+    urgent = Task.query.filter_by(type = "2").filter(Task.date <= date.today() + timedelta(days=3)).filter_by(user_id = current_user.id).order_by(Task.date).all()
+    coming_up = Task.query.filter_by(type = "2").filter(date.today() + timedelta(days=3) < Task.date).filter(Task.date <= date.today() + timedelta(days=7)).filter_by(user_id = current_user.id).order_by(Task.date).all()
+    not_urgent = Task.query.filter_by(type = "2").filter(date.today() + timedelta(days=7) < Task.date).filter_by(user_id = current_user.id).order_by(Task.date).all()
     if request.method  == "POST":
         action = request.form["action"]
         if action == "add":
@@ -163,10 +170,11 @@ def personal_task():
             new_task.type = form.type.data
             new_task.event_id = form.event.data
             new_task.hours = form.hours.data
+            new_task.user_id = current_user.id
             db.session().add(new_task)
             db.session().commit()
-            msg = "OK" if new_task else sys.last_value
-            return make_response(msg, 200)
+            flash("Task added :)")
+            return redirect(url_for("personal_task"))
         elif action == "edit":
             print("edit")
             id = request.form["id"]
@@ -177,13 +185,17 @@ def personal_task():
             task.type = form.type.data
             task.event_id = form.event.data
             task.hours = form.hours.data
+            task.user_id = current_user.id
             db.session().commit()
+            flash("Task edited :)")
         elif action == "delete":
             print("delete")
             id = request.form["id"]
             task = Task.query.get(id)
             db.session.delete(task)
             db.session().commit()
+            flash("Task deleted :)")
+            return redirect(url_for("personal_task"))
     return render_template("personal_task.html", urgent=urgent, coming_up=coming_up, not_urgent=not_urgent, form=form)
 
 

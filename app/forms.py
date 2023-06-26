@@ -21,14 +21,14 @@ class TaskForm(FlaskForm):
     date = DateField("Date")
     type = SelectField("Type", [validators.Length(min=2, max=144)])
     event = SelectField("Event", [validators.Length(min=2, max=144)])
-    #need to change hours so that you can only select integer values
     hours = IntegerField("Hours it will take", [validators.NumberRange(min=0, max=24)])
     #category = SelectField("Category", [validators.Length(min=2, max=144)])
 
 def taskForm(request):
     form = TaskForm(request.POST)
     form.type.choices = [(1, "School"), (2, "Personal")]
-    form.event.choices = [(event.id, event.name) for event in Event.query.all()]
+    #need to have "other" as an option
+    #form.event.choices = [(event.id, event.name) for event in Event.query.all()]
 
 #form to decide how much time to spend on school and personal tasks
 class TodayForm(FlaskForm):

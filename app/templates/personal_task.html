@@ -10,8 +10,19 @@
 {% extends "layout.html" %}
 {% block content %}
 <body>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
     <div class = "form-popup" id = "myForm">
-        <form method="POST" action="/school" class = "form-container">
+        <form method="POST" action="/personal" class = "form-container">
             <div class = "w3-padding-small">{{ form.csrf_token }}</div>
             <div class = "w3-padding-small">{{ form.name.label }} {{ form.name(placeholder = "Task name") }}</div>
             <div class = "w3-padding-small">{{ form.description.label }} {{ form.description(size=50, placeholder = "Add a description") }}</div>
@@ -33,7 +44,7 @@
 
     <div class = "w3-card w3-container">
     <h5>Urgent</h5>
-    <table>
+    <table class = "w3-table w3-striped">
         <tr>
             <th>Task</th>
             <th>Description</th>
@@ -82,9 +93,11 @@
     </table>
     </div>
 
+    <br>
+
     <div class = "w3-card w3-container">
         <h5>Coming Up</h5>
-        <table>
+        <table class = "w3-table w3-striped">
             <tr>
                 <th>Task</th>
                 <th>Description</th>
@@ -133,9 +146,11 @@
         </table>
     </div>
 
+    <br>
+
     <div class = "w3-card w3-container">
         <h5>Not Urgent</h5>
-        <table>
+        <table class = "w3-table w3-striped">
             <tr>
                 <th>Task</th>
                 <th>Description</th>
