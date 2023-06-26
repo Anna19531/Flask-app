@@ -22,7 +22,7 @@ class TaskForm(FlaskForm):
     type = SelectField("Type", [validators.Length(min=2, max=144)])
     event = SelectField("Event", [validators.Length(min=2, max=144)])
     #need to change hours so that you can only select integer values
-    hours = IntegerField("Hours", [validators.NumberRange(min=0, max=24)])
+    hours = IntegerField("Hours it will take", [validators.NumberRange(min=0, max=24)])
     #category = SelectField("Category", [validators.Length(min=2, max=144)])
 
 def taskForm(request):
@@ -36,13 +36,13 @@ class TodayForm(FlaskForm):
     personal = IntegerField("Personal", [validators.NumberRange(min=0, max=24)])
 
 class Login(FlaskForm):
-    username = StringField("username: ", validators=[DataRequired()])
-    password = PasswordField("password: ", validators=[DataRequired()])
+    username = StringField("Username: ", validators=[DataRequired()])
+    password = PasswordField("Password: ", validators=[DataRequired()])
 
 class CreateAccount(FlaskForm):
-    username = StringField("username: ", validators=[DataRequired()])
-    password = PasswordField("password: ", validators=[DataRequired()])
-    password2 = PasswordField("password again: ", validators=[DataRequired()])
-    email = EmailField("email: ", validators=[DataRequired()])
+    username = StringField("Username: ", validators=[DataRequired()])
+    password = PasswordField("Password: ", validators=[DataRequired()])
+    password2 = PasswordField("Password again: ", validators=[DataRequired()])
+    email = EmailField("Email: ", validators=[DataRequired()])
 
 

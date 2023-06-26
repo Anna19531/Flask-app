@@ -5,9 +5,9 @@
     <div class = "form-popup" id = "myForm">
         <form method="POST" action="/school" class = "form-container">
             {{ form.csrf_token }}
-            <div class = "w3-padding-small">{{ form.name.label }} {{ form.name }}</div>
-            <div class = "w3-padding-small">{{ form.description.label }} {{ form.description(size=50) }}</div>
-            <div class = "w3-padding-small">{{ form.date.label }} {{ form.date }}</div>
+            <div class = "w3-padding-small">{{ form.name.label }} {{ form.name(placeholder = "Task name") }}</div>
+            <div class = "w3-padding-small">{{ form.description.label }} {{ form.description(size=50, placeholder = "Add a description") }}</div>
+            <div class = "w3-padding-small">{{ form.date.label }} {{ form.date() }}</div>
             <div class = "w3-padding-small">{{ form.type.label }} {{ form.type }}</div>
             <div class = "w3-padding-small">{{ form.event.label }} {{ form.event }}</div>
             <div class = "w3-padding-small">{{ form.hours.label }} {{ form.hours }}</div>

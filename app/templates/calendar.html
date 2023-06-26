@@ -32,8 +32,8 @@
 	<div class = "form-popup" id = "myForm">
 	<form method="POST" action="/calendar" class = "form-container">
 		{{ form.csrf_token }}
-		<div class = "w3-padding-small">{{ form.name.label }} {{ form.name(size=20) }} </div>
-		<div class = "w3-padding-small">{{ form.description.label }} {{ form.description(size=20) }}</div>
+		<div class = "w3-padding-small">{{ form.name.label }} {{ form.name(placeholder = "Event name") }} </div>
+		<div class = "w3-padding-small">{{ form.description.label }} {{ form.description(placeholder = "Add a description") }}</div>
 		<div class = "w3-padding-small">{{ form.date.label }} {{ form.date }}</div>
 		<div class = "w3-padding-small">{{ form.colour.label }} {{ form.colour }}</div>
 		<input type = "hidden" name = "action" value = "add">
@@ -85,7 +85,7 @@
 					<form method="POST" action="/calendar" class = "form-container">
 						{{ form.csrf_token }}
 						<div class = "w3-padding-small">{{ form.name.label }} {{ form.name(value = event.name) }}</div>
-						<div class = "w3-padding-small">{{ form.description.label }} {{ form.description(size=20, value = event.description) }}</div>
+						<div class = "w3-padding-small">{{ form.description.label }} {{ form.description(value = event.description) }}</div>
 						<div class = "w3-padding-small">{{ form.date.label }} {{ form.date(value = event.date)}} </div>
 						<div class = "w3-padding-small">{{ form.colour.label }} {{ form.colour(value = event.colour) }}</div>
 						<input type = "hidden" name = "action" value = "edit">
