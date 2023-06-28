@@ -209,34 +209,49 @@ def today():
     form = TodayForm()
     school_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 1).order_by(Task.date).all()
     personal_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 2).order_by(Task.date).all()
+    completed = Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all()
     if request.method == "POST":
-        school_time = 0
-        personal_time = 0
-        school_hours = form.school.data
-        personal_hours = form.personal.data
-        print(personal_hours)
-        #found a bug where if the user didn't input a value for the hours, it would be NoneType
-        if school_hours == None:
-            school_hours = 0
-        if personal_hours == None:
-            personal_hours = 0
-        for task in Task.query.order_by(Task.date).filter_by(user_id = current_user.id).all():
-            #reset all tasks to False i.e. not today's task
-            task.today = False
-            db.session().commit()
-            if task.type == "1":
-                if school_time + task.hours <= school_hours:
-                    school_time += task.hours
-                    task.today = True
-                    db.session().commit()
-            else:
-                if personal_time + task.hours <= personal_hours:
-                    personal_time += task.hours
-                    task.today = True
-                    db.session().commit()
+        action = request.form["action"]
+        if action == "select":
+            for task in Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all():
+                db.session().delete(task)
+                db.session().commit()
+            completed = []
+            school_time = 0
+            personal_time = 0
+            school_hours = form.school.data
+            personal_hours = form.personal.data
+            #found a bug where if the user didn't input a value for the hours, it would be NoneType
+            if school_hours == None:
+                school_hours = 0
+            if personal_hours == None:
+                personal_hours = 0
+            for task in Task.query.order_by(Task.date).filter_by(user_id = current_user.id).all():
+                #reset all tasks to False i.e. not today's task
+                task.today = False
+                db.session().commit()
+                if task.type == "1":
+                    if school_time + task.hours <= school_hours:
+                        school_time += task.hours
+                        task.today = True
+                        db.session().commit()
+                else:
+                    if personal_time + task.hours <= personal_hours:
+                        personal_time += task.hours
+                        task.today = True
+                        db.session().commit()   
+        else:
+            tasks_done = request.form.getlist("task")
+            print(tasks_done)
+            for id in tasks_done:
+                task = Task.query.filter_by(id = id).one()
+                task.today = False
+                task.completed = True
+                db.session().commit()
         school_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 1).order_by(Task.date).all()
-        personal_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 2).order_by(Task.date).all()
-    return render_template("today.html", form=form, school_tasks=school_tasks, personal_tasks=personal_tasks)
+        personal_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 2).order_by(Task.date).all() 
+        completed = Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all()   
+    return render_template("today.html", form=form, school_tasks=school_tasks, personal_tasks=personal_tasks, completed=completed)
 
 
 @app.route("/profile", methods=["GET", "POST"])

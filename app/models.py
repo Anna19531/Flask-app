@@ -21,6 +21,7 @@ class Task(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     today = db.Column(db.Boolean)
+    completed = db.Column(db.Boolean)
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)

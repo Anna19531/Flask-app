@@ -19,6 +19,7 @@
         {{ form.csrf_token }}
         {{ form.school.label }} {{ form.school }}
         {{ form.personal.label }} {{ form.personal }}
+        <input type = "hidden" name = "action" value = "select">
         <input type="submit" value="Submit">
     </form>
 
@@ -27,6 +28,7 @@
         <h4> School </h4>
         <table class = "w3-table w3-striped">
             <tr>
+                <th>Done?</th>
                 <th>Task</th>
                 <th>Description</th>
                 <th>Date</th>
@@ -36,7 +38,8 @@
             </tr>
             {% for task in school_tasks %}
             <tr>
-                <td>{{ task.name }}</td>
+                <td><form method = "POST" action = "/today"><input type = "checkbox" name = "task" value = "{{ task.id }}"></td>
+                <label for="{{ task.id }}"><td>{{ task.name }}</td></label>
                 <td>{{ task.description }}</td>
                 <td>{{ task.date }}</td>
                 <td>{{ task.type }}</td>
@@ -53,6 +56,7 @@
         <h4> Personal </h4>
         <table class = "w3-table w3-striped">
             <tr>
+                <th>Done?</th>
                 <th>Task</th>
                 <th>Description</th>
                 <th>Date</th>
@@ -62,7 +66,8 @@
             </tr>
             {% for task in personal_tasks %}
             <tr>
-                <td>{{ task.name }}</td>
+                <td><input type = "checkbox" name = "task" value = "{{ task.id }}"></td>
+                <label for="{{ task.id }}"><td>{{ task.name }}</td></label>
                 <td>{{ task.description }}</td>
                 <td>{{ task.date }}</td>
                 <td>{{ task.type }}</td>
@@ -72,6 +77,37 @@
             {% endfor %}
         </table>
     </div>
+    <input type = "hidden" name = "action" value = "done">
+    <input type = "submit" value = "Submit">
+    </form>
+
+    <h4> Completed </h4>
+    <div class = "w3-card w3-container">
+        <table class = "w3-table w3-striped">
+            <tr>
+                <th>Done?</th>
+                <th>Task</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Event</th>
+                <th>Hours</th>
+            </tr>
+            {% for task in completed %}
+            <tr>
+                <td><input type = "checkbox" name = "task" value = "{{ task.id }}" checked></td>
+                <label for="{{ task.id }}"><td>{{ task.name }}</td></label>
+                <td>{{ task.description }}</td>
+                <td>{{ task.date }}</td>
+                <td>{{ task.type }}</td>
+                <td>{{ task.event }}</td>
+                <td>{{ task.hours }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
 </body>
 </html>
 {% endblock %}
+
