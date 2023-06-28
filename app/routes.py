@@ -43,13 +43,14 @@ def home():
             if user and check_password_hash(user.password, password):
                 login_user(user, remember = remember)
                 flash("Logged in successfully :)")
-                return redirect(url_for("today"))
+                return redirect(url_for("calendar"))
             else:
                 flash("Incorrect username or password :(")
         else:
             new_user = models.User()
             new_user.username = acc_form.username.data
-            new_user.password = generate_password_hash(acc_form.password.data, method = "sha256")
+            #"sha256" was the original method used to hash the password but this is outdated so changed to "scrypt"
+            new_user.password = generate_password_hash(acc_form.password.data, method = "scrypt")
             new_user.email = acc_form.email.data
             db.session().add(new_user)
             db.session().commit()
@@ -105,9 +106,12 @@ def school_task():
     #choices for the dropdown menu
     form.type.choices = [(1, "School"), (2, "Personal")]
     form.event.choices = [(event.id, event.name) for event in Event.query.filter_by(user_id = current_user.id).all()]
-    urgent = Task.query.filter_by(type = "1").filter(Task.date <= date.today() + timedelta(days=3)).filter_by(user_id = current_user.id).order_by(Task.date).all()
-    coming_up = Task.query.filter_by(type = "1").filter(date.today() + timedelta(days=3) < Task.date).filter_by(user_id = current_user.id).filter(Task.date <= date.today() + timedelta(days=7)).order_by(Task.date).all()
-    not_urgent = Task.query.filter_by(type = "1").filter(date.today() + timedelta(days=7) < Task.date).filter_by(user_id = current_user.id).order_by(Task.date).all()
+    urgent = Task.query.filter_by(type = "1").filter(Task.date <= date.today() + timedelta(days=3)).filter_by(
+        user_id = current_user.id).order_by(Task.date).all()
+    coming_up = Task.query.filter_by(type = "1").filter(date.today() + timedelta(days=3) < Task.date).filter_by(
+        user_id = current_user.id).filter(Task.date <= date.today() + timedelta(days=7)).order_by(Task.date).all()
+    not_urgent = Task.query.filter_by(type = "1").filter(date.today() + timedelta(days=7) < Task.date).filter_by(
+        user_id = current_user.id).order_by(Task.date).all()
     if request.method  == "POST":
         action = request.form["action"]
         if action == "add":
@@ -203,28 +207,35 @@ def personal_task():
 @login_required
 def today():
     form = TodayForm()
-    school_time = 0
-    personal_time = 0
-    school_tasks = []
-    personal_tasks = []
+    school_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 1).order_by(Task.date).all()
+    personal_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 2).order_by(Task.date).all()
     if request.method == "POST":
+        school_time = 0
+        personal_time = 0
         school_hours = form.school.data
         personal_hours = form.personal.data
+        print(personal_hours)
         #found a bug where if the user didn't input a value for the hours, it would be NoneType
-        if personal_hours == "NoneType":
-            personal_hours = 0
-        if school_hours == "NoneType":
+        if school_hours == None:
             school_hours = 0
-        print(school_hours)
+        if personal_hours == None:
+            personal_hours = 0
         for task in Task.query.order_by(Task.date).filter_by(user_id = current_user.id).all():
+            #reset all tasks to False i.e. not today's task
+            task.today = False
+            db.session().commit()
             if task.type == "1":
                 if school_time + task.hours <= school_hours:
                     school_time += task.hours
-                    school_tasks.append(task)
+                    task.today = True
+                    db.session().commit()
             else:
                 if personal_time + task.hours <= personal_hours:
                     personal_time += task.hours
-                    personal_tasks.append(task)
+                    task.today = True
+                    db.session().commit()
+        school_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 1).order_by(Task.date).all()
+        personal_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 2).order_by(Task.date).all()
     return render_template("today.html", form=form, school_tasks=school_tasks, personal_tasks=personal_tasks)
 
 

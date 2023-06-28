@@ -20,13 +20,21 @@ class Task(db.Model):
     #category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    today = db.Column(db.Boolean)
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
     password = db.Column(db.String)
     email = db.Column(db.String)
+
     def __repr__(self):
         return self.username
+    
+    def get_id(self):
+        return str(self.id)
+    
+    
+    
 
 
