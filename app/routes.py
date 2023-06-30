@@ -207,9 +207,9 @@ def personal_task():
 @login_required
 def today():
     form = TodayForm()
-    school_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 1).order_by(Task.date).all()
-    personal_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 2).order_by(Task.date).all()
-    completed = Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all()
+    #school_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 1).order_by(Task.date).all()
+    #personal_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 2).order_by(Task.date).all()
+    #completed = Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all()
     if request.method == "POST":
         action = request.form["action"]
         if action == "select":
@@ -240,7 +240,7 @@ def today():
                         personal_time += task.hours
                         task.today = True
                         db.session().commit()   
-        else:
+        elif action == "done":
             tasks_done = request.form.getlist("task")
             print(tasks_done)
             for id in tasks_done:
@@ -248,9 +248,17 @@ def today():
                 task.today = False
                 task.completed = True
                 db.session().commit()
-        school_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 1).order_by(Task.date).all()
-        personal_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 2).order_by(Task.date).all() 
-        completed = Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all()   
+        else:
+            undo = request.form.getlist("task_done")
+            for task_id in Task.query.with_entities(Task.id).filter_by(completed = True).filter_by(user_id = current_user.id).all():
+                if task_id not in undo:
+                    task = Task.query.filter_by(id = task_id[0]).one()
+                    task.today = True
+                    task.completed = False
+                    db.session().commit()
+    school_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 1).order_by(Task.date).all()
+    personal_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 2).order_by(Task.date).all() 
+    completed = Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all()   
     return render_template("today.html", form=form, school_tasks=school_tasks, personal_tasks=personal_tasks, completed=completed)
 
 

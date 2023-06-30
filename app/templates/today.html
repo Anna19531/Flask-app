@@ -95,7 +95,7 @@
             </tr>
             {% for task in completed %}
             <tr>
-                <td><input type = "checkbox" name = "task" value = "{{ task.id }}" checked></td>
+                <td><form method = "POST" action = "/today"><input type = "checkbox" name = "task_done" value = "{{ task.id }}" checked></td>
                 <label for="{{ task.id }}"><td>{{ task.name }}</td></label>
                 <td>{{ task.description }}</td>
                 <td>{{ task.date }}</td>
@@ -106,6 +106,8 @@
             {% endfor %}
         </table>
     </div>
+    <input type = "hidden" name = "action" value = "undone">
+    <input type = "submit" value = "Submit">
 
 </body>
 </html>
