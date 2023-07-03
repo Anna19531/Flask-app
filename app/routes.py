@@ -207,9 +207,6 @@ def personal_task():
 @login_required
 def today():
     form = TodayForm()
-    #school_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 1).order_by(Task.date).all()
-    #personal_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 2).order_by(Task.date).all()
-    #completed = Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all()
     if request.method == "POST":
         action = request.form["action"]
         if action == "select":
@@ -249,6 +246,7 @@ def today():
                 task.completed = True
                 db.session().commit()
         else:
+            #if the user checked off a task by accident, they can undo it by unchecking the box
             undo = request.form.getlist("task_done")
             for task_id in Task.query.with_entities(Task.id).filter_by(completed = True).filter_by(user_id = current_user.id).all():
                 if task_id not in undo:

@@ -11,6 +11,7 @@ currMonth = date.getMonth();
 const months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
 
+
 const renderCalendar = () => {
     let firstDayofMonth = new Date(currYear, currMonth, 1).getDay(), // getting first day of month
     lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate(), // getting last date of month
@@ -41,28 +42,9 @@ const renderCalendar = () => {
         console.log(error);
     });*/
 
-
-    let events = [];
-
-    async function fetchData() {
-    try {
-        const response = await fetch('/data.json');
-        const data = await response.json();
-        events = data;
-        // console.log(events);
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-    fetchData().then(() => {
-    // Access the modified value of 'events' here
-    console.log(events);
-    });
-
-    // function to get event name to display in calendar
-    function getEventName(day, events) {
-        debugger;
+ // function to get event name to display in calendar
+ function getEventName(day, events) {
+    debugger;
     const event = events.find(event => {
         const eventDate = new Date(event.date);
         const eventDay = eventDate.getDate();
@@ -71,33 +53,62 @@ const renderCalendar = () => {
         return eventDay === day && eventMonth === currMonth && eventYear === currYear;
         
     });
-    
+
     return event ? event.name : "";
     }
-    
+
+function loadEvents() {
     for (let i = 1; i <= lastDateofMonth; i++) { // creating li of all days of current month
-         // adding active class to li if the current day, month, and year matched
-        let isToday = i === date.getDate() && currMonth === new Date().getMonth() && currYear === new Date().getFullYear() ? "active" : "";
-        let hasEvent = false;
-        events.forEach(event => {
-            const eventDate = new Date(event.date);
-            const eventDay = eventDate.getDate();
-            const eventMonth = eventDate.getMonth();
-            const eventYear = eventDate.getFullYear();
-    
-            if (eventDay === i && eventMonth === currMonth && eventYear === currYear) {
-                hasEvent = true;
-            }
-        });
+        // adding active class to li if the current day, month, and year matched
+       let isToday = i === date.getDate() && currMonth === new Date().getMonth() && currYear === new Date().getFullYear() ? "active" : "";
+       let hasEvent = false;
+       events.forEach(event => {
+           const eventDate = new Date(event.date);
+           const eventDay = eventDate.getDate();
+           const eventMonth = eventDate.getMonth();
+           const eventYear = eventDate.getFullYear();
+   
+           if (eventDay === i && eventMonth === currMonth && eventYear === currYear) {
+               hasEvent = true;
+           }
+       });
 
-        liTag += `<li class="${isToday}${hasEvent ? " event" : ""}">${i}\n${hasEvent ? `<span class="event-name">${getEventName(i, events)}</span>` : ""}</li>`;
+       liTag += `<li class="${isToday}${hasEvent ? " event" : ""}">${i}\n${hasEvent ? `<span class="event-name">${getEventName(i, events)}</span>` : ""}</li>`;
+   }
+
+   for (let i = lastDayofMonth; i < 6; i++) { // creating li of next month first days
+    liTag += `<li class="inactive">${i - lastDayofMonth + 1}</li>`
     }
 
-    for (let i = lastDayofMonth; i < 6; i++) { // creating li of next month first days
-        liTag += `<li class="inactive">${i - lastDayofMonth + 1}</li>`
-    }
     currentDate.innerText = `${months[currMonth]} ${currYear}`; // passing current mon and yr as currentDate text
     daysTag.innerHTML = liTag;
+}
+
+
+    let events = [];
+
+    async function fetchData() {
+        try {
+            const response = await fetch('/data.json');
+            const data = await response.json();
+            events = data;
+            console.log(events);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    fetchData().then(() => {
+        // Access the modified value of 'events' here
+        // TODO: Load calendar here...
+        //getEventName(day, events);
+        loadEvents();
+
+        console.log(events);
+    });
+
+    console.log(events)
+    
 }
 renderCalendar();
 

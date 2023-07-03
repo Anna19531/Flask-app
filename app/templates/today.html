@@ -38,7 +38,7 @@
             </tr>
             {% for task in school_tasks %}
             <tr>
-                <td><form method = "POST" action = "/today"><input type = "checkbox" name = "task" value = "{{ task.id }}"></td>
+                <td><form method = "POST" action = "/today"><input type = "checkbox" class = "checkbox" name = "task" value = "{{ task.id }}"></td>
                 <label for="{{ task.id }}"><td>{{ task.name }}</td></label>
                 <td>{{ task.description }}</td>
                 <td>{{ task.date }}</td>
@@ -66,7 +66,7 @@
             </tr>
             {% for task in personal_tasks %}
             <tr>
-                <td><input type = "checkbox" name = "task" value = "{{ task.id }}"></td>
+                <td><input type = "checkbox" class = "checkbox" name = "task" value = "{{ task.id }}"></td>
                 <label for="{{ task.id }}"><td>{{ task.name }}</td></label>
                 <td>{{ task.description }}</td>
                 <td>{{ task.date }}</td>
@@ -95,7 +95,7 @@
             </tr>
             {% for task in completed %}
             <tr>
-                <td><form method = "POST" action = "/today"><input type = "checkbox" name = "task_done" value = "{{ task.id }}" checked></td>
+                <td><form method = "POST" action = "/today"><input type = "checkbox" class = "checkbox" name = "task_done" value = "{{ task.id }}" checked></td>
                 <label for="{{ task.id }}"><td>{{ task.name }}</td></label>
                 <td>{{ task.description }}</td>
                 <td>{{ task.date }}</td>
@@ -113,3 +113,18 @@
 </html>
 {% endblock %}
 
+<script>
+    var checkboxes = document.querySelectorAll(".checkbox");
+    var completed = []
+
+    checkboxes.forEach(function(checkbox) {
+    checkbox.addEventListener("change", function() {
+        if (checkbox.checked) {
+        completed.push("{{ task.id }}")
+        console.log(completed)
+        } else {
+        console.log(checkbox.id + " is not checked");
+        }
+    });
+    });
+</script>
