@@ -25,7 +25,7 @@ def object_as_dict(obj):
 
 @app.route("/data.json")
 def serve_js():
-    events = Event.query.all()
+    events = Event.query.filter_by(user_id = current_user.id).all()
     return jsonify([object_as_dict(event) for event in events])
 
 
@@ -239,7 +239,6 @@ def today():
                         db.session().commit()   
         elif action == "done":
             tasks_done = request.form.getlist("task")
-            print(tasks_done)
             for id in tasks_done:
                 task = Task.query.filter_by(id = id).one()
                 task.today = False
@@ -249,7 +248,8 @@ def today():
             #if the user checked off a task by accident, they can undo it by unchecking the box
             undo = request.form.getlist("task_done")
             for task_id in Task.query.with_entities(Task.id).filter_by(completed = True).filter_by(user_id = current_user.id).all():
-                if task_id not in undo:
+                #task_id is a tuple 
+                if str(task_id[0]) not in undo:
                     task = Task.query.filter_by(id = task_id[0]).one()
                     task.today = True
                     task.completed = False
