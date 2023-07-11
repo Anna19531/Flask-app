@@ -37,6 +37,7 @@
 				<li>Sat</li>
 			</ul>
 			<ul class = "days"></ul>
+			<div id = "button"></div>
 		</div>
 	</div>
 
@@ -96,6 +97,7 @@
 				<button class="open" onclick="openEditForm()">Edit</button>
 				<div class = "form-popup" id = "myEditForm">
 					<form method="POST" action="/calendar" class = "form-container">
+						<input type = "hidden" name = id value = "{{ event.id }}">
 						{{ form.csrf_token }}
 						<div class = "w3-padding-small">{{ form.name.label }} {{ form.name(value = event.name) }}</div>
 						<div class = "w3-padding-small">{{ form.description.label }} {{ form.description(value = event.description) }}</div>
@@ -104,20 +106,27 @@
 						<input type = "hidden" name = "action" value = "edit">
 						<input type = "hidden" name = id value = "{{ event.id }}"> 
 						<div class = "w3-padding-small"><input type="submit" value="Save"></div>
+						<div>
+							<form method = "POST" action = "/calendar">
+								<input type = "hidden" name = "action" value = "delete">
+								<input type = "hidden" name = id value = "{{ event.id }}">
+								<button class = "delete" onclick = "return confirm('Are you sure you want to delete this event?');">Delete</button>
+							</form>
+						</div>
 						<button type="button" class="btn cancel" onclick="closeEditForm()">Close</button>
 					</form>
 				</div>
 			</td>
-			<td>
+			<td> 
 				<form method = "POST" action = "/calendar">
 					<input type = "hidden" name = "action" value = "delete">
 					<input type = "hidden" name = id value = "{{ event.id }}">
 					<button class = "delete" onclick = "return confirm('Are you sure you want to delete this event?');">Delete</button>
+				</form>
 			</td>
 		</tr>
 		{% endfor %}
 	</table>
-	
 
 </body>
 

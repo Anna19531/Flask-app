@@ -23,25 +23,6 @@ const renderCalendar = () => {
         liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
     }
 
-    // list of events - need to change this so that I get the events from the database
-    /*const events = [
-        { date: "2023-06-15", name: "Event 1" },
-        { date: "2023-05-20", name: "Event 2" },
-        { date: "2023-05-25", name: "Event 3" }
-      ];*/
-
-    //fetch the json and create an list of dictionaries called events
-    /*let events = [];
-    fetch('/data.json')
-    .then(response => response.json())
-    .then(data => {
-        events = data;
-        //console.log(events)
-    })
-    .catch(error => {
-        console.log(error);
-    });*/
-
  // function to get event name to display in calendar
  function getEventName(day, events) {
     debugger;
@@ -71,9 +52,14 @@ function loadEvents() {
            if (eventDay === i && eventMonth === currMonth && eventYear === currYear) {
                hasEvent = true;
            }
-       });
+        });
 
-       liTag += `<li class="${isToday}${hasEvent ? " event" : ""}">${i}\n${hasEvent ? `<span class="event-name">${getEventName(i, events)}</span>` : ""}</li>`;
+        if (hasEvent == true) {
+            liTag += `<li class="${isToday}${hasEvent ? " event" : ""}">${i}\n${hasEvent ? `<button onclick = "openEditForm()" class="event-name id = "myEditForm">${getEventName(i, events)}</button>` : ""}</li>`;
+        }
+        else {
+            liTag += `<li class="${isToday}${hasEvent ? " event" : ""}">${i}\n${hasEvent ? `<span class="event-name">${getEventName(i, events)}</span>` : ""}</li>`;
+        }
    }
 
    for (let i = lastDayofMonth; i < 6; i++) { // creating li of next month first days
@@ -92,7 +78,6 @@ function loadEvents() {
             const response = await fetch('/data.json');
             const data = await response.json();
             events = data;
-            console.log(events);
         } catch (error) {
             console.log(error);
         }
@@ -101,13 +86,8 @@ function loadEvents() {
     fetchData().then(() => {
         // Access the modified value of 'events' here
         // TODO: Load calendar here...
-        //getEventName(day, events);
         loadEvents();
-
-        console.log(events);
     });
-
-    console.log(events)
     
 }
 renderCalendar();
@@ -145,16 +125,3 @@ function closeEditForm() {
     document.getElementById("myEditForm").style.display = "none";
   }
 
-/*let events = [];
-
-    fetch('/calendar')
-    .then(response => response.json())
-    .then(data => {
-        events = data;
-        console.log(events);
-
-        getEventName(day);
-    })
-    .catch(error => {
-        console.log(error);
-    });*/
