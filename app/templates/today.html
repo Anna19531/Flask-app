@@ -4,6 +4,8 @@
 
     <h2>Today</h2>
 
+    <p> You've been productive for {{ streak }} days!</p>
+
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <ul class=flashes>
@@ -113,7 +115,7 @@
 </html>
 {% endblock %}
 
-<script>
+<!-- <script> 
     var checkboxes = document.querySelectorAll(".checkbox");
     var completed = []
 
@@ -127,4 +129,4 @@
         }
     });
     });
-</script>
+</script>-->

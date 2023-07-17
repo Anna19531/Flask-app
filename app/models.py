@@ -28,6 +28,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String)
     password = db.Column(db.String)
     email = db.Column(db.String)
+    streak = db.Column(db.Integer, default = 0)
 
     def __repr__(self):
         return self.username

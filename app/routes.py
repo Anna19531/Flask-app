@@ -207,9 +207,17 @@ def personal_task():
 @login_required
 def today():
     form = TodayForm()
+    streak = current_user.streak
     if request.method == "POST":
         action = request.form["action"]
         if action == "select":
+            completed = Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all()   
+            #streak tracker
+            if len(completed) == len(Task.query.filter_by(today = True).filter_by(user_id = current_user.id).all()):
+                current_user.streak += 1
+                streak = current_user.streak
+                db.session().commit()
+                print(current_user.streak)
             for task in Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all():
                 db.session().delete(task)
                 db.session().commit()
@@ -257,7 +265,7 @@ def today():
     school_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 1).order_by(Task.date).all()
     personal_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 2).order_by(Task.date).all() 
     completed = Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all()   
-    return render_template("today.html", form=form, school_tasks=school_tasks, personal_tasks=personal_tasks, completed=completed)
+    return render_template("today.html", form=form, school_tasks=school_tasks, personal_tasks=personal_tasks, completed=completed, streak = streak)
 
 
 @app.route("/profile", methods=["GET", "POST"])
