@@ -58,7 +58,7 @@ function loadEvents() {
             liTag += `<li class="${isToday}${hasEvent ? " event" : ""}">${i}\n${hasEvent ? `<button onclick = "openEditForm()" class="event-name id = "myEditForm">${getEventName(i, events)}</button>` : ""}</li>`;
         }
         else {
-            liTag += `<li class="${isToday}${hasEvent ? " event" : ""}">${i}\n${hasEvent ? `<span class="event-name">${getEventName(i, events)}</span>` : ""}</li>`;
+            liTag += `<li class="${isToday}${hasEvent ? " event" : ""}">${i}\n${hasEvent ? `<span class="event-name">${getEventName(i, events)}</span>`: ""}</li>`;
         }
    }
 
@@ -124,4 +124,7 @@ function closeForm() {
 function closeEditForm() {
     document.getElementById("myEditForm").style.display = "none";
   }
+
+
+
 

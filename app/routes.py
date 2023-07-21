@@ -208,19 +208,29 @@ def personal_task():
 def today():
     form = TodayForm()
     streak = current_user.streak
+    progress = current_user.progress
+    total = current_user.total
     if request.method == "POST":
         action = request.form["action"]
+        #selecting hours
         if action == "select":
-            completed = Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all()   
             #streak tracker
-            if len(completed) == len(Task.query.filter_by(today = True).filter_by(user_id = current_user.id).all()):
+            #checking if all tasks for today have been completed
+            completed = Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all()   
+            if len(completed) == len(Task.query.filter_by(today = True).filter_by(user_id = current_user.id).all()) and len(completed) != 0:
                 current_user.streak += 1
                 streak = current_user.streak
                 db.session().commit()
-                print(current_user.streak)
+            else:
+                #reset streak to 0 if the user didn't complete all tasks for today
+                current_user.streak = 0
+                streak = current_user.streak
+                db.session().commit()
+            #deleting the completed tasks
             for task in Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all():
                 db.session().delete(task)
                 db.session().commit()
+            #if multiple people using the site will they have a separate completed list?? Ask Mr Rodkiss
             completed = []
             school_time = 0
             personal_time = 0
@@ -245,6 +255,8 @@ def today():
                         personal_time += task.hours
                         task.today = True
                         db.session().commit()   
+            total = len(Task.query.filter_by(today = True).filter_by(user_id = current_user.id).all())
+            print(total)
         elif action == "done":
             tasks_done = request.form.getlist("task")
             for id in tasks_done:
@@ -252,6 +264,18 @@ def today():
                 task.today = False
                 task.completed = True
                 db.session().commit()
+            #progress bar
+            completed = Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all()
+            print(completed)
+            print(len(completed))
+            print(total)
+            if total == 0:
+                progress = 0
+            else:
+                progress = len(completed)/total * 100
+                current_user.progress = progress
+                db.session().commit()
+            print(progress)
         else:
             #if the user checked off a task by accident, they can undo it by unchecking the box
             undo = request.form.getlist("task_done")
@@ -265,7 +289,7 @@ def today():
     school_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 1).order_by(Task.date).all()
     personal_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 2).order_by(Task.date).all() 
     completed = Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all()   
-    return render_template("today.html", form=form, school_tasks=school_tasks, personal_tasks=personal_tasks, completed=completed, streak = streak)
+    return render_template("today.html", form=form, school_tasks=school_tasks, personal_tasks=personal_tasks, completed=completed, streak = streak, progress = progress)
 
 
 @app.route("/profile", methods=["GET", "POST"])

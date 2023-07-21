@@ -163,4 +163,20 @@ header .current-date{
   opacity: 1;
 }
 
+.progress {
+  width: 90%;
+  height: 20px;
+  background: #f2f2f2;
+  border-radius: 10px;
+  margin: 10px 0;
+  overflow: hidden;
+  align-items: center;
+}
+
+.bar {
+  width: 10%;
+  background: #04AA6D;
+  border-radius: 10px;
+  transition: 0.5s;
+}
 
