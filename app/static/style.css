@@ -13,13 +13,27 @@
   background: #9B59B6;
 }*/
 
+/* Need to fix flash css so that nothing is displayed when there is no flash message */
+/*.flash{
+  border: 1px solid #efcead;
+  background-color:	#efcead;
+  color: black;
+  padding: 8px;
+  margin: 10px 50px;
+  border-radius: 10px; 
+  animation: fade-in 2s ease;
+}*/
+
 /* Background of calendar */
+
 .wrapper{
   width: 60rem;
   background: #fff;
   border-radius: 10px;
   border-style: solid;
-  text-align: left;
+  margin: auto;
+  align-items: center;
+
 }
 .wrapper header{
   display: flex;
@@ -127,10 +141,9 @@ header .current-date{
 .form-popup {
   display: none;
   position: fixed;
-  top: 0;
+  top: 10px;
   right: 15px;
   border: 3px solid #f1f1f1;
-  z-index: 9;
 }
 
 /* Add styles to the form container */
@@ -180,3 +193,28 @@ header .current-date{
   transition: 0.5s;
 }
 
+/*flex container for login page */
+
+.flex-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-items: center;
+  margin-top:10%;
+  vertical-align: text-top;
+}
+
+.flex-item {
+  border: 1px solid #357ded;
+  padding: 20px;
+  border-radius: 20px;
+
+}
+
+.login_input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border-radius: 4px;
+  box-sizing: border-box;
+}

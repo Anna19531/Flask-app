@@ -11,24 +11,36 @@
             </ul>
         {% endif %}
     {% endwith %}
-    <p class = "w3-text"> Login </p>
-    <form method = "POST" action = "/" class = "w3-container">
-        {{ login_form.csrf_token }}
-        {{ login_form.username.label }} {{ login_form.username }}
-        {{ login_form.password.label }} {{ login_form.password }}
-        <input type="submit" value="Submit" class = "w3-btn w3-border">
-        <input type="hidden" value = "login" name = "login">
-    </form>
+    <div class = "flex-container">
+        <div class = "flex-item w3-card">
+            <h3 style = "text-align:center"> Login </h3>
+            <div style = "margin:10px"><form method = "POST" action = "/" class = "w3-container"></div>
+                {{ login_form.csrf_token }}
+                <div style = "margin:10px"> Username </div>
+                <div style = "margin:10px"> {{ login_form.username(class_ = "login_input") }}</div>
+                <div style = "margin:10px"> Password </div>
+                <div style = "margin:10px"> {{ login_form.password(class_ = "login_input") }}</div>
+                <div style = "margin:10px"><input type="submit" value="Sign in" class = "w3-btn w3-border"></div>
+                <input type="hidden" value = "login" name = "login">
+            </form>
+        </div>
 
-    <p> Create Account </p>
-    <form method = "POST" action = "/" class = "w3-container">
-        {{ acc_form.csrf_token }}
-        {{ acc_form.username.label }} {{ acc_form.username }}
-        {{ acc_form.password.label }} {{ acc_form.password }}
-        {{ acc_form.email.label }} {{ acc_form.email }}
-        <input type="submit" value="Submit" class = "w3-btn w3-border" >
-        <input type="hidden" value = "acc" name = "login" >
-    </form>
+        <div class = "flex-item w3-card">
+            <h3 style = "text-align:center"> Create Account </h3>
+            <div style = "margin:10px"><form method = "POST" action = "/" class = "w3-container"></div>
+                {{ acc_form.csrf_token }}
+                <div style = "margin:10px"> Username </div>
+                <div style = "margin:10px"> {{ acc_form.username(class_ = "login_input") }}</div>
+                <div style = "margin:10px"> Password </div>
+                <div style = "margin:10px"> {{ acc_form.password(class_ = "login_input") }}</div>
+                <div style = "margin:10px"> Email </div>
+                <div style = "margin:10px"> {{ acc_form.email(class_ = "login_input") }}</div>
+                <div style = "margin:10px"><input type="submit" value="Sign up" class = "w3-btn w3-border"></div>
+                <input type="hidden" value = "acc" name = "login">
+            </form>
+        </div>
+    </div>
 </body>
 
 {% endblock %}
+
