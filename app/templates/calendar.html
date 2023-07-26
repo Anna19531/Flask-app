@@ -46,13 +46,16 @@
 	<div class = "form-popup" id = "myForm">
 	<form method="POST" action="/calendar" class = "form-container">
 		{{ form.csrf_token }}
+		<div class = "w3-padding-small"><h4> Add Event </h4> </div>
 		<div class = "w3-padding-small">{{ form.name.label }} {{ form.name(placeholder = "Event name") }} </div>
 		<div class = "w3-padding-small">{{ form.description.label }} {{ form.description(placeholder = "Add a description") }}</div>
 		<div class = "w3-padding-small">{{ form.date.label }} {{ form.date }}</div>
 		<div class = "w3-padding-small">{{ form.colour.label }} {{ form.colour }}</div>
 		<input type = "hidden" name = "action" value = "add">
-		<div class = "w3-padding-small"><input type="submit" value="Save"></div>
-		<button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+		<div class = "form-flex-container">
+			<div class = "w3-padding-small"><input type="submit" class = "btn" value="Save"></div>
+			<div><button type="button" class="btn cancel" onclick="closeForm()">Close</button></div>
+		</div>
 	</form>
 	</div>
 

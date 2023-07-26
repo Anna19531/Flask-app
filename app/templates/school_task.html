@@ -15,18 +15,23 @@
         {% endif %}
     {% endwith %}
 
+    <button class="open-button" onclick="openForm()">Add Task</button>
+
     <div class = "form-popup" id = "myForm">
         <form method="POST" action="/school" class = "form-container">
             {{ form.csrf_token }}
+            <div class = "w3-padding-small"><h4> Add School Task </h4> </div>
             <div class = "w3-padding-small">{{ form.name.label }} {{ form.name(placeholder = "Task name") }}</div>
-            <div class = "w3-padding-small">{{ form.description.label }} {{ form.description(size=50, placeholder = "Add a description") }}</div>
+            <div class = "w3-padding-small">{{ form.description.label }} {{ form.description(placeholder = "Add a description") }}</div>
             <div class = "w3-padding-small">{{ form.date.label }} {{ form.date() }}</div>
             <div class = "w3-padding-small">{{ form.type.label }} {{ form.type }}</div>
             <div class = "w3-padding-small">{{ form.event.label }} {{ form.event }}</div>
             <div class = "w3-padding-small">{{ form.hours.label }} {{ form.hours }}</div>
             <input type = "hidden" name = "action" value = "add">
-            <div class = "w3-padding-small"><input type="submit" value="Add"></div>
-            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+            <div class = "form-flex-container">
+                <div class = "w3-padding-small"><input type="submit" class = "btn" value="Add"></div>
+                <div><button type="button" class="btn cancel" onclick="closeForm()">Close</button></div>
+            </div>
         </form>
     </div>
 
@@ -34,7 +39,6 @@
 <br>
 <br>
 
-<button class="open-button" onclick="openForm()">Add Task</button>
 
 <div class = "w3-card w3-container">
     <h5>Urgent</h5>

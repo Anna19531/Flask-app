@@ -158,12 +158,13 @@ header .current-date{
 .form-container .btn {
   background-color: #04AA6D;
   color: white;
-  padding: 16px 20px;
+  padding: 8px 8px;
   border: none;
   cursor: pointer;
   width: 100%;
   margin-bottom:10px;
   opacity: 0.8;
+  display: inline-block;
 }
 
 /* Add a red background color to the cancel button */
@@ -217,4 +218,12 @@ header .current-date{
   margin: 8px 0;
   border-radius: 4px;
   box-sizing: border-box;
+}
+
+.form-flex-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content:space-between;
+  vertical-align: text-top;
+
 }
