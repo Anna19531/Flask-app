@@ -177,15 +177,7 @@ header .current-date{
   opacity: 1;
 }
 
-.progress {
-  width: 90%;
-  height: 20px;
-  background: #f2f2f2;
-  border-radius: 10px;
-  margin: 10px 0;
-  overflow: hidden;
-  align-items: center;
-}
+
 
 .bar {
   width: 10%;
@@ -236,4 +228,62 @@ header .current-date{
   vertical-align: text-top;
   align-items: center;
 
+}
+
+/* Progress bar */
+
+.container {
+
+  margin:auto;
+}
+
+.progress-container {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin:auto;
+  margin-bottom: 30px;
+  margin-top: 30px;
+  max-width: 100%;
+  width: 50%;
+}
+
+.progress-container::before {
+  content: ""; /* Mandatory with ::before */
+  background-color: #999;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  height: 4px;
+  width: 100%;
+  z-index: -1;
+}
+
+.progress {
+  background-color: #357ded;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  height: 4px;
+  width: 0%;
+  z-index: -1;
+  transition: 0.4s ease;
+}
+
+.circle {
+  background-color: #fff;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #999;
+  transition: 0.4s ease;
+}
+
+.active {
+  border-color: #357ded;
 }

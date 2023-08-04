@@ -16,10 +16,6 @@
 
     <h2>Today</h2>
 
-    <div class = "progress">
-        <div id = bar > 0% </div>
-    </div>
-    
     <h4> Select hours for school and personal tasks </h4>
     <form method = "POST" action = "/today">
         {{ form.csrf_token }}
@@ -30,6 +26,15 @@
     </form>
 
     <h2> Today's Tasks</h2>
+
+    <h4>Progress</h4>
+    <div class = "progress-container">
+        <div class = "progress" id = "progress"></div>
+        {% for t in range(0, total+1) %}
+            <div class="circle{% if t <= completed_tasks %} active{% endif %}"> {{ t }} </div>
+        {% endfor %}
+    </div>
+
 
     <div class = "flex-container">
         <div class = "w3-card" style = "width:30%">
@@ -122,23 +127,8 @@
 </html>
 {% endblock %}
 
-<!-- <script> 
-    var checkboxes = document.querySelectorAll(".checkbox");
-    var completed = []
-
-    checkboxes.forEach(function(checkbox) {
-    checkbox.addEventListener("change", function() {
-        if (checkbox.checked) {
-        completed.push("{{ task.id }}")
-        console.log(completed)
-        } else {
-        console.log(checkbox.id + " is not checked");
-        }
-    });
-    });
-</script>-->
-
 <script>
     document.getElementById("bar").innerHTML = "{{ progress }}%";
     console.log("{{ progress }}")
 </script>
+

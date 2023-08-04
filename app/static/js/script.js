@@ -125,6 +125,15 @@ function closeEditForm() {
     document.getElementById("myEditForm").style.display = "none";
   }
 
+// Progress bar
 
+const progress = document.getElementById("progress");
+const circles = document.querySelectorAll(".circle");
 
+const update = () => {
+    const actives = document.querySelectorAll(".active");
+    progress.style.width = ((actives.length - 1) / (circles.length - 1)) * 100 + "%";
+}
+
+update();
 
