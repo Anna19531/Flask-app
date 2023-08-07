@@ -47,14 +47,17 @@ def home():
             else:
                 flash("Incorrect username or password :(")
         else:
-            new_user = models.User()
-            new_user.username = acc_form.username.data
-            #"sha256" was the original method used to hash the password but this is outdated so changed to "scrypt"
-            new_user.password = generate_password_hash(acc_form.password.data, method = "scrypt")
-            new_user.email = acc_form.email.data
-            db.session().add(new_user)
-            db.session().commit()
-            flash("Account created :)")
+            if acc_form.email.data in [user.email for user in User.query.all()]:
+                flash("Email already used by another user, please use another one")
+            else:
+                new_user = models.User()
+                new_user.username = acc_form.username.data
+                #"sha256" was the original method used to hash the password but this is outdated so changed to "scrypt"
+                new_user.password = generate_password_hash(acc_form.password.data, method = "scrypt")
+                new_user.email = acc_form.email.data
+                db.session().add(new_user)
+                db.session().commit()
+                flash("Account created :)")
     return render_template("home.html", login_form=login_form, acc_form=acc_form)
 
 
