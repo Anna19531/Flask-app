@@ -167,8 +167,12 @@ header .current-date{
   display: inline-block;
 }
 
-/* Add a red background color to the cancel button */
+/* Add a red background color to the cancel and delete button */
 .form-container .cancel {
+  background-color: red;
+}
+
+.btn .delete {
   background-color: red;
 }
 
@@ -176,8 +180,6 @@ header .current-date{
 .form-container .btn:hover, .open-button:hover {
   opacity: 1;
 }
-
-
 
 .bar {
   width: 10%;
@@ -212,6 +214,7 @@ header .current-date{
   box-sizing: border-box;
 }
 
+/* CSS for flex containers in add/edit forms */
 .form-flex-container {
   display: flex;
   flex-flow: row wrap;
@@ -220,22 +223,26 @@ header .current-date{
 
 }
 
+/* CSS for flex container in today page */
 .task-flex-container {
   display: flex;
   flex-direction: column;
 
-  justify-content: center;
+  justify-content: space-between;
   vertical-align: text-top;
   align-items: center;
 
 }
 
-/* Progress bar */
+.vertical-flex-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  vertical-align: text-top;
 
-.container {
-
-  margin:auto;
 }
+
+/* Progress bar */
 
 .progress-container {
   display: flex;

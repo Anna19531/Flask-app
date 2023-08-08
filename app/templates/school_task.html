@@ -74,8 +74,15 @@
                                     <div class = "w3-padding-small">{{ form.hours.label }} {{ form.hours(value = task.hours) }}</div>
                                     <input type = "hidden" name = "action" value = "edit">
                                     <input type = "hidden" name = id value = "{{ task.id }}"> 
-                                    <div class = "w3-padding-small"><input type="submit" value="Save"></div>
-                                    <button type="button" class="btn cancel" onclick="closeEditForm()">Close</button>
+                                    <div class = "form-flex-container">
+                                        <div><input type="submit" class = "btn" value="Save"></div>
+                                        <div><form method = "POST" action = "/school">
+                                            <input type = "hidden" name = "action" value = "delete">
+                                            <input type = "hidden" name = id value = "{{ task.id }}">
+                                            <button class = "delete btn cancel" onclick = "return confirm('Are you sure you want to delete this event?');">Delete</button>
+                                        </form> </div>
+                                        <div><button type="button" class="btn cancel" onclick="closeEditForm()">Close</button></div>
+                                    </div>
                                 </form>
                             </div>
                     </td>
@@ -127,8 +134,16 @@
                                     <div class = "w3-padding-small">{{ form.hours.label }} {{ form.hours(value = task.hours) }}</div>
                                     <input type = "hidden" name = "action" value = "edit">
                                     <input type = "hidden" name = id value = "{{ task.id }}"> 
-                                    <div class = "w3-padding-small"><input type="submit" value="Save"></div>
-                                    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+                                    <div class = "form-flex-container">
+                                        <div><input type="submit" class = "btn" value="Save"></div>
+                                        <div><form method = "POST" action = "/school">
+                                            <input type = "hidden" name = "action" value = "delete">
+                                            <input type = "hidden" name = id value = "{{ task.id }}">
+                                            <button class = "delete btn cancel" onclick = "return confirm('Are you sure you want to delete this event?');">Delete</button>
+                                        </form> </div>
+                                        <div><button type="button" class="btn cancel" onclick="closeEditForm()">Close</button></div>
+                                    </div>
+                                
                                 </form>
                             </div>
                     </td>
@@ -180,8 +195,16 @@
                                     <div class = "w3-padding-small">{{ form.hours.label }} {{ form.hours(value = task.hours) }}</div>
                                     <input type = "hidden" name = "action" value = "edit">
                                     <input type = "hidden" name = id value = "{{ task.id }}"> 
-                                    <div class = "w3-padding-small"><input type="submit" value="Save"></div>
-                                    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+                                    <div class = "form-flex-container">
+                                        <div><input type="submit" class = "btn" value="Save"></div>
+                                        <div><form method = "POST" action = "/school">
+                                            <input type = "hidden" name = "action" value = "delete">
+                                            <input type = "hidden" name = id value = "{{ task.id }}">
+                                            <button class = "delete btn cancel" onclick = "return confirm('Are you sure you want to delete this event?');">Delete</button>
+                                        </form> </div>
+                                        <div><button type="button" class="btn cancel" onclick="closeEditForm()">Close</button></div>
+                                    </div>
+                                    
                                 </form>
                             </div>
                     </td>
