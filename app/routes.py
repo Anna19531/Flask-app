@@ -23,10 +23,17 @@ def object_as_dict(obj):
     return {c.key: getattr(obj, c.key)
             for c in inspect(obj).mapper.column_attrs if c.key != "date"} | {"date": str(getattr(obj, "date"))}
 
+#send events data to the Javascript file
 @app.route("/data.json")
 def serve_js():
     events = Event.query.filter_by(user_id = current_user.id).all()
     return jsonify([object_as_dict(event) for event in events])
+
+
+#if the entered url doesn't exist, return this page
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 
 @app.route("/", methods = ["GET", "POST"])
