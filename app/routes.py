@@ -116,6 +116,7 @@ def school_task():
     #choices for the dropdown menu
     form.type.choices = [(1, "School"), (2, "Personal")]
     form.event.choices = [(event.id, event.name) for event in Event.query.filter_by(user_id = current_user.id).all()]
+    form.event.choices.append((0, "Other"))
     urgent = Task.query.filter_by(type = "1").filter(Task.date <= date.today() + timedelta(days=3)).filter_by(
         user_id = current_user.id).order_by(Task.date).all()
     coming_up = Task.query.filter_by(type = "1").filter(date.today() + timedelta(days=3) < Task.date).filter_by(
@@ -218,7 +219,6 @@ def personal_task():
 def today():
     form = TodayForm()
     streak = current_user.streak
-    progress = current_user.progress
     total = current_user.total
     completed_tasks = len(Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all())
     print(completed_tasks)
@@ -253,24 +253,26 @@ def today():
                 school_hours = 0
             if personal_hours == None:
                 personal_hours = 0
-            for task in Task.query.order_by(Task.date).filter_by(user_id = current_user.id).all():
-                #reset all tasks to False i.e. not today's task
-                task.today = False
+            if len(Task.query.filter_by(user_id = current_user.id).all()) == 0:
+                flash("Please add some tasks to do")
+            else:
+                for task in Task.query.order_by(Task.date).filter_by(user_id = current_user.id).all():
+                    #reset all tasks to False i.e. not today's task
+                    task.today = False
+                    db.session().commit()
+                    if task.type == "1":
+                        if school_time + task.hours <= school_hours:
+                            school_time += task.hours
+                            task.today = True
+                            db.session().commit()
+                    else:
+                        if personal_time + task.hours <= personal_hours:
+                            personal_time += task.hours
+                            task.today = True
+                            db.session().commit()   
+                total = len(Task.query.filter_by(today = True).filter_by(user_id = current_user.id).all())
+                current_user.total = total
                 db.session().commit()
-                if task.type == "1":
-                    if school_time + task.hours <= school_hours:
-                        school_time += task.hours
-                        task.today = True
-                        db.session().commit()
-                else:
-                    if personal_time + task.hours <= personal_hours:
-                        personal_time += task.hours
-                        task.today = True
-                        db.session().commit()   
-            total = len(Task.query.filter_by(today = True).filter_by(user_id = current_user.id).all())
-            session['total'] = total
-            current_user.total = session['total']
-            db.session().commit()
         #when user is checking off completed tasks
         elif action == "done":
             tasks_done = request.form.getlist("task")
@@ -294,7 +296,7 @@ def today():
     school_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 1).order_by(Task.date).all()
     personal_tasks = Task.query.filter_by(today = True).filter_by(user_id = current_user.id).filter_by(type = 2).order_by(Task.date).all() 
     completed = Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all()   
-    return render_template("today.html", form=form, school_tasks=school_tasks, personal_tasks=personal_tasks, completed=completed, streak=streak, progress=progress, total=total, completed_tasks=completed_tasks)
+    return render_template("today.html", form=form, school_tasks=school_tasks, personal_tasks=personal_tasks, completed=completed, streak=streak, total=total, completed_tasks=completed_tasks)
 
 
 @app.route("/profile", methods=["GET", "POST"])
