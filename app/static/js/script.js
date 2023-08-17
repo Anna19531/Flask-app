@@ -25,7 +25,6 @@ const renderCalendar = () => {
 
  // function to get event name to display in calendar
  function getEventName(day, events) {
-    debugger;
     const event = events.find(event => {
         const eventDate = new Date(event.date);
         const eventDay = eventDate.getDate();
@@ -37,6 +36,21 @@ const renderCalendar = () => {
 
     return event ? event.name : "";
     }
+
+ function getEventID(day, events) {
+    const event = events.find(event => {
+        const eventDate = new Date(event.date);
+        const eventDay = eventDate.getDate();
+        const eventMonth = eventDate.getMonth();
+        const eventYear = eventDate.getFullYear();
+        return eventDay === day && eventMonth === currMonth && eventYear === currYear;
+        
+    });
+
+    console.log(event.id)
+    return event ? event.id : "";
+    }
+
 
 function loadEvents() {
     for (let i = 1; i <= lastDateofMonth; i++) { // creating li of all days of current month
@@ -55,7 +69,7 @@ function loadEvents() {
         });
 
         if (hasEvent == true) {
-            liTag += `<li class="${isToday}${hasEvent ? " event" : ""}">${i}\n${hasEvent ? `<button onclick = "openEditForm()" class="event-name id = "myEditForm">${getEventName(i, events)}</button>` : ""}</li>`;
+            liTag += `<li class="${isToday}${hasEvent ? " event" : ""}">${i}\n${hasEvent ? `<button onclick = "openEditForm(${getEventID(i, events)})" class="event-name" id = "myEditForm">${getEventName(i, events)}</button>` : ""}</li>`;
         }
         else {
             liTag += `<li class="${isToday}${hasEvent ? " event" : ""}">${i}\n${hasEvent ? `<span class="event-name">${getEventName(i, events)}</span>`: ""}</li>`;
@@ -83,9 +97,13 @@ function loadEvents() {
         }
     }
 
+
+    
+
     fetchData().then(() => {
         // Access the modified value of 'events' here
         // TODO: Load calendar here...
+        console.log(events)
         loadEvents();
     });
     
@@ -113,17 +131,35 @@ function openForm() {
   document.getElementById("myForm").style.display = "block";
 }
 
-function openEditForm() {
-    document.getElementById("myEditForm").style.display = "block";
+function openEditForm(eventID) {
+    var formID = "myEditForm" + eventID;
+    console.log(formID)
+    document.getElementById(formID).style.display = "block";
   }
 
 function closeForm() {
-  document.getElementById("myForm").style.display = "none";
+    document.getElementById("myForm").style.display = "none";
 }
 
-function closeEditForm() {
-    document.getElementById("myEditForm").style.display = "none";
+function closeEditForm(eventID) {
+    var formID = "myEditForm" + eventID;
+    console.log(formID)
+    document.getElementById(formID).style.display = "none";
   }
+
+function openTaskEditForm(taskID) {
+    var formID = "myEditForm" + taskID;
+    console.log(formID)
+    document.getElementById(formID).style.display = "block";
+}
+
+function closeTaskEditForm(taskID) {
+    var formID = "myEditForm" + taskID;
+    console.log(formID)
+    document.getElementById(formID).style.display = "none";
+}
+
+
 
 // Progress bar
 
