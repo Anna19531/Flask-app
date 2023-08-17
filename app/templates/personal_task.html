@@ -71,8 +71,8 @@
                     <td>{{ task.event }}</td>
                     <td>{{ task.hours }}</td>
                     <td>
-                        <button class="open" onclick="openEditForm()">Edit</button>
-                            <div class = "form-popup" id = "myEditForm">
+                        <button class="open" onclick="openTaskEditForm('{{ task.id }}')">Edit</button>
+                            <div class = "form-popup" id = "myEditForm{{ task.id }}">
                                 <form method="POST" action="/personal" class = "form-container">
                                     {{ form.csrf_token }}
                                     <div class = "w3-padding-small">{{ form.name.label }} {{ form.name(value = task.name) }}</div>
@@ -90,7 +90,7 @@
                                             <input type = "hidden" name = id value = "{{ task.id }}">
                                             <button class = "delete btn cancel" onclick = "return confirm('Are you sure you want to delete this event?');">Delete</button>
                                         </form> </div>
-                                        <div><button type="button" class="btn cancel" onclick="closeEditForm()">Close</button></div>
+                                        <div><button type="button" class="btn cancel" onclick="closeTaskEditForm('{{ task.id }}')">Close</button></div>
                                     </div>
                                 </form>
                             </div>
@@ -131,8 +131,8 @@
                     <td>{{ task.event }}</td>
                     <td>{{ task.hours }}</td>
                     <td>
-                        <button class="open" onclick="openEditForm()">Edit</button>
-                            <div class = "form-popup" id = "myEditForm">
+                        <button class="open" onclick="openTaskEditForm('{{ task.id }}')">Edit</button>
+                            <div class = "form-popup" id = "myEditForm{{ task.id }}">
                                 <form method="POST" action="/personal" class = "form-container">
                                     {{ form.csrf_token }}
                                     <div class = "w3-padding-small">{{ form.name.label }} {{ form.name(value = task.name) }}</div>
@@ -150,7 +150,7 @@
                                             <input type = "hidden" name = id value = "{{ task.id }}">
                                             <button class = "delete btn cancel" onclick = "return confirm('Are you sure you want to delete this event?');">Delete</button>
                                         </form> </div>
-                                        <div><button type="button" class="btn cancel" onclick="closeEditForm()">Close</button></div>
+                                        <div><button type="button" class="btn cancel" onclick="closeTaskEditForm('{{ task.id }}')">Close</button></div>
                                     </div>
             
                                 </form>
@@ -192,8 +192,8 @@
                     <td>{{ task.event }}</td>
                     <td>{{ task.hours }}</td>
                     <td>
-                        <button class="open" onclick="openEditForm()">Edit</button>
-                            <div class = "form-popup" id = "myEditForm">
+                        <button class="open" onclick="openTaskEditForm('{{ task.id }}')">Edit</button>
+                            <div class = "form-popup" id = "myEditForm{{ task.id }}">
                                 <form method="POST" action="/personal" class = "form-container">
                                     {{ form.csrf_token }}
                                     <div class = "w3-padding-small">{{ form.name.label }} {{ form.name(value = task.name) }}</div>
@@ -211,7 +211,7 @@
                                             <input type = "hidden" name = id value = "{{ task.id }}">
                                             <button class = "delete btn cancel" onclick = "return confirm('Are you sure you want to delete this event?');">Delete</button>
                                         </form> </div>
-                                        <div><button type="button" class="btn cancel" onclick="closeEditForm()">Close</button></div>
+                                        <div><button type="button" class="btn cancel" onclick="closeTaskEditForm('{{ task.id }}')">Close</button></div>
                                     </div>
                                 </form>
                             </div>

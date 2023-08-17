@@ -82,8 +82,9 @@
 				Delete?
 			</th>
 		</tr>
+		{% for event in events %}
 		<tr>
-			{% for event in events %}
+
 			<td>
 				{{ event.name }}
 			</td>
@@ -97,15 +98,17 @@
 				{{ event.colour }}
 			</td>
 			<td> 
-				<button class="open" onclick="openEditForm()">Edit</button>
-				<div class = "form-popup" id = "myEditForm">
+				<button class="open" onclick="openEditForm('{{event.id}}')">Edit</button>
+				<div class = "form-popup" id = "myEditForm{{ event.id }}">
 					<form method="POST" action="/calendar" class = "form-container">
+						<!-- Set the values for the forms as the information for the event whse edit form is opened -->
 						{{ form.csrf_token }}
 						<div class = "w3-padding-small"><h4> Edit Event </h4> </div>
-						<div class = "w3-padding-small">{{ form.name.label }} {{ form.name(value = event.name) }}</div>
+						<div class = "w3-padding-small">{{ form.name.label }} {{ form.name(value = event.name) }} </div>
 						<div class = "w3-padding-small">{{ form.description.label }} {{ form.description(value = event.description) }}</div>
-						<div class = "w3-padding-small">{{ form.date.label }} {{ form.date(value = event.date)}} </div>
+						<div class = "w3-padding-small">{{ form.date.label }} {{ form.date(value = event.date) }}</div>
 						<div class = "w3-padding-small">{{ form.colour.label }} {{ form.colour(value = event.colour) }}</div>
+					
 						<input type = "hidden" name = "action" value = "edit">
 						<input type = "hidden" name = id value = "{{ event.id }}"> 
 						<div class = "form-flex-container">
@@ -115,7 +118,7 @@
 									<div><input type = "hidden" name = id value = "{{ event.id }}"></div>
 									<button class = "btn delete" onclick = "return confirm('Are you sure you want to delete this event?');">Delete</button>
 							</form></div>
-							<div><button type="button" class="btn cancel" onclick="closeEditForm()">Close</button></div>
+							<div><button type="button" class="btn cancel" onclick="closeEditForm('{{event.id}}')">Close</button></div>
 						</div>
 
 					</form>
@@ -128,8 +131,9 @@
 					<button class = "delete" onclick = "return confirm('Are you sure you want to delete this event?');">Delete</button>
 				</form>
 			</td>
+			{% endfor %}
 		</tr>
-		{% endfor %}
+
 	</table>
 
 </body>
