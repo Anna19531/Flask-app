@@ -56,6 +56,8 @@ def home():
         else:
             if acc_form.email.data in [user.email for user in User.query.all()]:
                 flash("Email already used by another user, please use another one")
+            elif acc_form.username.data in [user.username for user in User.query.all()]:
+                flash("Username already taken, please use another one")
             else:
                 new_user = models.User()
                 new_user.username = acc_form.username.data
@@ -170,6 +172,7 @@ def personal_task():
     #choices for the dropdown menu
     form.type.choices = [(1, "School"), (2, "Personal")]
     form.event.choices = [(event.id, event.name) for event in Event.query.filter_by(user_id = current_user.id).all()]
+    form.event.choices.append((0, "Other"))
     #filter Tasks by events that have a date within 3 days of the current date and by the user logged in
     urgent = Task.query.filter_by(type = "2").filter(Task.date <= date.today() + timedelta(days=3)).filter_by(user_id = current_user.id).order_by(Task.date).all()
     coming_up = Task.query.filter_by(type = "2").filter(date.today() + timedelta(days=3) < Task.date).filter(Task.date <= date.today() + timedelta(days=7)).filter_by(user_id = current_user.id).order_by(Task.date).all()
@@ -221,15 +224,17 @@ def today():
     streak = current_user.streak
     total = current_user.total
     completed_tasks = len(Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all())
-    print(completed_tasks)
     if request.method == "POST":
         action = request.form["action"]
         #selecting hours
         if action == "select":
-            #streak tracker
+            #streak tracker - doesn't work
             #checking if all tasks for today have been completed
-            completed = Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all()   
-            if len(completed) == len(Task.query.filter_by(today = True).filter_by(user_id = current_user.id).all()) and len(completed) != 0:
+            completed = Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all()  
+            print(len(completed)) 
+            print(total)
+            print(len(Task.query.filter_by(today = True).filter_by(user_id = current_user.id).all()))
+            if len(completed) == total and len(completed) != 0:
                 current_user.streak += 1
                 streak = current_user.streak
                 db.session().commit()
@@ -302,7 +307,9 @@ def today():
 @app.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
-    return render_template("profile.html")
+    username = current_user.username
+    email = current_user.email
+    return render_template("profile.html", username=username, email=email)
 
 @app.route("/logout")
 @login_required
