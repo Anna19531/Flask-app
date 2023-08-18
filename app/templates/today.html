@@ -12,7 +12,11 @@
         {% endif %}
     {% endwith %}
 
-    <p> You've been productive for {{ streak }} days!</p>
+    {% if streak == 1 %}
+        <p> You've been productive for {{ streak }} day!</p>
+    {% else %}
+        <p> You've been productive for {{ streak }} days!</p>
+    {% endif %}
 
     <h2>Today</h2>
 

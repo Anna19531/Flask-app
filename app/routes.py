@@ -228,12 +228,12 @@ def today():
         action = request.form["action"]
         #selecting hours
         if action == "select":
-            #streak tracker - doesn't work
+            print("select")
+            #streak tracker - bug where if you submit form and reload immediately, streak resets to 0
             #checking if all tasks for today have been completed
             completed = Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all()  
             print(len(completed)) 
             print(total)
-            print(len(Task.query.filter_by(today = True).filter_by(user_id = current_user.id).all()))
             if len(completed) == total and len(completed) != 0:
                 current_user.streak += 1
                 streak = current_user.streak
@@ -278,6 +278,7 @@ def today():
                 total = len(Task.query.filter_by(today = True).filter_by(user_id = current_user.id).all())
                 current_user.total = total
                 db.session().commit()
+            return redirect(url_for("today"))
         #when user is checking off completed tasks
         elif action == "done":
             tasks_done = request.form.getlist("task")
