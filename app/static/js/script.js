@@ -97,9 +97,6 @@ function loadEvents() {
         }
     }
 
-
-    
-
     fetchData().then(() => {
         // Access the modified value of 'events' here
         // TODO: Load calendar here...
@@ -131,6 +128,7 @@ function openForm() {
   document.getElementById("myForm").style.display = "block";
 }
 
+// If I have time: close other forms when one is opened
 function openEditForm(eventID) {
     var formID = "myEditForm" + eventID;
     console.log(formID)

@@ -27,13 +27,17 @@
 
     <h2> Today's Tasks</h2>
 
-    <h4>Progress</h4>
-    <div class = "progress-container">
-        <div class = "progress" id = "progress"></div>
-        {% for t in range(0, total+1) %}
-            <div class="circle{% if t <= completed_tasks %} active{% endif %}"> {{ t }} </div>
-        {% endfor %}
-    </div>
+    {% if total > 0 %}
+        <h4>Progress</h4>
+        <div class = "progress-container">
+            <div class = "progress" id = "progress"></div>
+            {% for t in range(0, total+1) %}
+                <div class="circle{% if t <= completed_tasks %} active{% endif %}"> {{ t }} </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p> No tasks today! </p>
+    {% endif %}
 
 
     <div class = "flex-container">
@@ -50,8 +54,11 @@
                     <th>Hours</th>
                 </tr>
                 {% for task in school_tasks %}
+
                 <tr>
-                    <td><form method = "POST" action = "/today"><input type = "checkbox" class = "checkbox" name = "task" value = "{{ task.id }}"></td>
+                    <form method = "POST" action = "/today">
+                    <!-- BUGGG - if only personal task in list, can't move to completed -->
+                    <td><input type = "checkbox" class = "checkbox" name = "task" value = "{{ task.id }}"></td>
                     <label for="{{ task.id }}"><td>{{ task.name }}</td></label>
                     <td>{{ task.description }}</td>
                     <td>{{ task.date }}</td>
