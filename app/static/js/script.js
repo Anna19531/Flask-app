@@ -157,13 +157,13 @@ function closeTaskEditForm(taskID) {
     document.getElementById(formID).style.display = "none";
 }
 
-
-
 // Progress bar
 
+// Get the number of circles (tasks) and the number of tasks completed
 const progress = document.getElementById("progress");
 const circles = document.querySelectorAll(".circle");
 
+// Update the progress bar
 const update = () => {
     const actives = document.querySelectorAll(".active");
     progress.style.width = ((actives.length - 1) / (circles.length - 1)) * 100 + "%";

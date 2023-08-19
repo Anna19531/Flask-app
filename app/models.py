@@ -29,7 +29,6 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String)
     email = db.Column(db.String)
     streak = db.Column(db.Integer, default = 0)
-    progress = db.Column (db.Integer, default = 0)
     total = db.Column (db.Integer, default = 0)
 
     def __repr__(self):

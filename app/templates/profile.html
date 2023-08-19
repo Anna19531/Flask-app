@@ -1,4 +1,44 @@
 {% extends "layout.html" %}
 {% block content %}
 
+<h2> Profile </h2>
+
+{% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+<p> Username: {{ username_original }} </p>
+<p> Email: {{ email_original }} </p>
+
+<h4> Settings </h4>
+
+<form method = "POST" action = "/profile">
+    <h4> Change Password </h4>
+    <input type = hidden name = "action" value = "password">
+    <input type = password name = "password" placeholder = "New Password"> </input>
+    <input type = password name = "password2" placeholder = "Confirm New Password"> </input>
+    <input type = submit value = "Save">
+</form>
+
+<form method = "POST" action = "/profile">
+    <h4> Change Username </h4>
+    <input type = hidden name = "action" value = "username">
+    <input type = text name = "username" placeholder = "New Username"> </input>
+    <input type = submit value = "Save">
+</form>
+
+<form method = "POST" action = "/profile">
+    <h4> Change Email </h4>
+    <input type = hidden name = "action" value = "email">
+    <input type = email name = "email" placeholder = "New Email"> </input>
+    <input type = submit value = "Save">
+</form>
+
+
 {% endblock %}

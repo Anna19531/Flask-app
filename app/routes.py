@@ -101,12 +101,15 @@ def calendar():
             event.colour = form.colour.data
             event.user_id = current_user.id
             db.session().commit()
+            flash("Event edited :)")
+            return redirect(url_for("calendar"))
         elif action == "delete":
             print("delete")
             id = request.form["id"]
             event = Event.query.get(id)
             db.session.delete(event)
             db.session().commit()
+            flash("Event deleted :)")
             return redirect(url_for("calendar"))
     return render_template("calendar.html", form=form, events=events)
 
@@ -154,6 +157,7 @@ def school_task():
             task.user_id = current_user.id
             db.session().commit()
             flash("Task edited :)")
+            return redirect(url_for("school_task"))
         elif action == "delete":
             print("delete")
             id = request.form["id"]
@@ -206,6 +210,7 @@ def personal_task():
             task.user_id = current_user.id
             db.session().commit()
             flash("Task edited :)")
+            return redirect(url_for("personal_task"))
         elif action == "delete":
             print("delete")
             id = request.form["id"]
@@ -229,12 +234,12 @@ def today():
         #selecting hours
         if action == "select":
             print("select")
-            #streak tracker - bug where if you submit form and reload immediately, streak resets to 0
+            #streak tracker - bug where strek resets to zero if no tasks for previous day
             #checking if all tasks for today have been completed
             completed = Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all()  
             print(len(completed)) 
             print(total)
-            if len(completed) == total and len(completed) != 0:
+            if  len(completed) != 0 and len(completed) == total:
                 current_user.streak += 1
                 streak = current_user.streak
                 db.session().commit()
@@ -308,9 +313,48 @@ def today():
 @app.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
-    username = current_user.username
-    email = current_user.email
-    return render_template("profile.html", username=username, email=email)
+    username_original = current_user.username
+    email_original = current_user.email
+    if request.method == "POST":
+        action = request.form['action']
+        #changing password
+        if action == "password":
+            print("password")
+            password = request.form["password"]
+            password2 = request.form["password2"]
+            if password == password2:
+                user = User.query.get(current_user.id)
+                user.password = generate_password_hash(password, method = "scrypt")
+                db.session().commit()
+                flash("Password changed :)")
+            else:
+                flash("Passwords don't match :(")
+            redirect(url_for("profile"))
+        #changing username
+        elif action == "username":
+            print("username")
+            username = request.form["username"]
+            if username in [user.username for user in User.query.all()]:
+                flash("Username already taken, please use another one")
+            else:
+                user = User.query.get(current_user.id)
+                user.username = username
+                db.session().commit()
+                flash("Username changed :)")
+            redirect(url_for("profile"))
+        #changing email
+        elif action == "email":
+            print("email")
+            email = request.form["email"]
+            if email in [user.email for user in User.query.all()]:
+                flash("Email already used by another user, please use another one")
+            else:
+                user = User.query.get(current_user.id)
+                user.email = email
+                db.session().commit()
+                flash("Email changed :)")
+            redirect(url_for("profile"))
+    return render_template("profile.html", username_original=username_original, email_original=email_original)
 
 @app.route("/logout")
 @login_required
