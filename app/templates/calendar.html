@@ -15,6 +15,7 @@
 		{% endif %}
 	{% endwith %}
 
+	<!-- Bug with delete? -->
 	<div class = "wrapper">
 		<header> 
 			<!-- Display current month and year -->
@@ -53,8 +54,8 @@
 		<div class = "w3-padding-small">{{ form.colour.label }} {{ form.colour }}</div>
 		<input type = "hidden" name = "action" value = "add">
 		<div class = "form-flex-container">
-			<div class = "w3-padding-small"><input type="submit" class = "btn" value="Save"></div>
 			<div><button type="button" class="btn cancel" onclick="closeForm()">Close</button></div>
+			<div class = "w3-padding-small"><input type="submit" class = "btn" value="Save"></div>
 		</div>
 	</form>
 	</div>
