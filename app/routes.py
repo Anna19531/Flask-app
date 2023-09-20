@@ -14,30 +14,35 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
+    """Get the id of the current user"""
     # since the user_id is just the primary key of our user table, use it in the query for the user
     return User.query.get(int(user_id))
 
     
-#convert a sqlalchemy object containing a date object to a dictionary
 def object_as_dict(obj):
+    """Convert a sqlalchemy object containing a date object to a dictionary - this is for the calendar display"""
     return {c.key: getattr(obj, c.key)
             for c in inspect(obj).mapper.column_attrs if c.key != "date"} | {"date": str(getattr(obj, "date"))}
 
-#send events data to the Javascript file
+
 @app.route("/data.json")
 def serve_js():
+    """Send the events data to the Javascript file"""
     events = Event.query.filter_by(user_id = current_user.id).all()
     return jsonify([object_as_dict(event) for event in events])
 
 
-#if the entered url doesn't exist, return this page
 @app.errorhandler(404)
 def page_not_found(e):
+    """If the entered url doesn't exist, return this page"""
     return render_template('404.html'), 404
 
 
 @app.route("/", methods = ["GET", "POST"])
 def home():
+    """Home page - login and create account from here"""
+    session['colour'] = "#357DED"
+    colour = session['colour']
     login_form = Login()
     acc_form = CreateAccount()
     remember = True if request.form.get('remember') else False
@@ -54,6 +59,7 @@ def home():
             else:
                 flash("Incorrect username or password :(")
         else:
+            #checking if the email or username is already being used by another user
             if acc_form.email.data in [user.email for user in User.query.all()]:
                 flash("Email already used by another user, please use another one")
             elif acc_form.username.data in [user.username for user in User.query.all()]:
@@ -67,18 +73,20 @@ def home():
                 db.session().add(new_user)
                 db.session().commit()
                 flash("Account created :)")
-    return render_template("home.html", login_form=login_form, acc_form=acc_form)
+    return render_template("home.html", login_form=login_form, acc_form=acc_form, colour=colour)
 
 
 @app.route("/calendar", methods=["GET", "POST"])
 @login_required
 def calendar():
+    """Display the calendar and add events to the calendar"""
     form = EventForm()
     #choices for the dropdown menu
     form.colour.choices = [(1, "Red"), (2, "Blue"), (3, "Green"), (4, "Yellow"), (5, "Orange"), (6, "Purple"), (7, "Black")]
     events = Event.query.filter_by(user_id = current_user.id).all()
     if request.method  == "POST":
         action = request.form["action"]
+        #adding a new event
         if action == "add":
             print("add")
             new_event = models.Event()
@@ -91,6 +99,7 @@ def calendar():
             db.session().commit()
             flash("Event added :)")
             return redirect(url_for("calendar"))
+        #editing an existing event
         elif action == "edit":
             print("edit")
             id = request.form["id"]
@@ -103,6 +112,7 @@ def calendar():
             db.session().commit()
             flash("Event edited :)")
             return redirect(url_for("calendar"))
+        #deleting an event
         elif action == "delete":
             print("delete")
             id = request.form["id"]
@@ -117,6 +127,7 @@ def calendar():
 @app.route("/school", methods=["GET", "POST"])
 @login_required
 def school_task():
+    """Display the school tasks and add tasks to the list"""
     form = TaskForm()
     #choices for the dropdown menu
     form.type.choices = [(1, "School"), (2, "Personal")]
@@ -130,6 +141,7 @@ def school_task():
         user_id = current_user.id).order_by(Task.date).all()
     if request.method  == "POST":
         action = request.form["action"]
+        #adding a new task
         if action == "add":
             print("add")
             new_task = models.Task()
@@ -144,6 +156,7 @@ def school_task():
             db.session().commit()
             flash("Task added :)")
             return redirect(url_for("school_task"))
+        #editing an existing task
         elif action == "edit":
             print("edit")
             id = request.form["id"]
@@ -158,6 +171,7 @@ def school_task():
             db.session().commit()
             flash("Task edited :)")
             return redirect(url_for("school_task"))
+        #deleting a task
         elif action == "delete":
             print("delete")
             id = request.form["id"]
@@ -172,6 +186,7 @@ def school_task():
 @app.route("/personal", methods=["GET", "POST"])
 @login_required
 def personal_task():
+    """Display the personal tasks and add tasks to the list"""
     form = TaskForm()
     #choices for the dropdown menu
     form.type.choices = [(1, "School"), (2, "Personal")]
@@ -183,6 +198,7 @@ def personal_task():
     not_urgent = Task.query.filter_by(type = "2").filter(date.today() + timedelta(days=7) < Task.date).filter_by(user_id = current_user.id).order_by(Task.date).all()
     if request.method  == "POST":
         action = request.form["action"]
+        #adding a new task
         if action == "add":
             print("add")
             new_task = models.Task()
@@ -197,6 +213,7 @@ def personal_task():
             db.session().commit()
             flash("Task added :)")
             return redirect(url_for("personal_task"))
+        #editing an existing task
         elif action == "edit":
             print("edit")
             id = request.form["id"]
@@ -211,6 +228,7 @@ def personal_task():
             db.session().commit()
             flash("Task edited :)")
             return redirect(url_for("personal_task"))
+        #deleting a task
         elif action == "delete":
             print("delete")
             id = request.form["id"]
@@ -225,6 +243,7 @@ def personal_task():
 @app.route("/today", methods=["GET", "POST"])
 @login_required
 def today():
+    """Set and display the tasks to be completed today. Also display progress and streak"""
     form = TodayForm()
     streak = current_user.streak
     total = current_user.total
@@ -234,7 +253,7 @@ def today():
         #selecting hours
         if action == "select":
             print("select")
-            #streak tracker - bug where strek resets to zero if no tasks for previous day
+            #streak tracker - bug where streak resets to zero if no tasks for previous day
             #checking if all tasks for today have been completed
             completed = Task.query.filter_by(completed = True).filter_by(user_id = current_user.id).all()  
             print(len(completed)) 
@@ -270,6 +289,7 @@ def today():
                     #reset all tasks to False i.e. not today's task
                     task.today = False
                     db.session().commit()
+                    #adding task to the today list as long as the total hours doesn't exceed the value input by the userz
                     if task.type == "1":
                         if school_time + task.hours <= school_hours:
                             school_time += task.hours
@@ -313,6 +333,10 @@ def today():
 @app.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
+    """Display the user's profile and change their password, username, email and background colour"""
+    #retrieving the user's background colour from the database
+    colour = current_user.colour
+    session['colour'] = colour
     username_original = current_user.username
     email_original = current_user.email
     if request.method == "POST":
@@ -322,8 +346,10 @@ def profile():
             print("password")
             password = request.form["password"]
             password2 = request.form["password2"]
+            #checking if the input password and confirm password match
             if password == password2:
                 user = User.query.get(current_user.id)
+                #hash new password
                 user.password = generate_password_hash(password, method = "scrypt")
                 db.session().commit()
                 flash("Password changed :)")
@@ -334,8 +360,10 @@ def profile():
         elif action == "username":
             print("username")
             username = request.form["username"]
+            #checking if username is already being used by another user
             if username in [user.username for user in User.query.all()]:
                 flash("Username already taken, please use another one")
+                username = username_original
             else:
                 user = User.query.get(current_user.id)
                 user.username = username
@@ -346,6 +374,7 @@ def profile():
         elif action == "email":
             print("email")
             email = request.form["email"]
+            #checking if username is already being used by another user
             if email in [user.email for user in User.query.all()]:
                 flash("Email already used by another user, please use another one")
             else:
@@ -354,11 +383,28 @@ def profile():
                 db.session().commit()
                 flash("Email changed :)")
             redirect(url_for("profile"))
-    return render_template("profile.html", username_original=username_original, email_original=email_original)
+        elif action == "colour":
+            print("colour")
+            colour = request.form["colour"]
+            with open('app/templates/profile.html', 'r') as html_file:
+                html_content = html_file.read()
+
+            updated_html_content = html_content.replace('{{ colour }}', f'<style>{colour}</style>')
+
+            # Write the updated HTML content back to the file
+            with open('app/templates/profile.html', 'w') as html_file:
+                html_file.write(updated_html_content)
+            user = User.query.get(current_user.id)
+            user.colour = colour
+            db.session().commit()
+            session['colour'] = current_user.colour
+            print(session['colour'])
+    return render_template("profile.html", username_original=username_original, email_original=email_original, colour=colour)
 
 @app.route("/logout")
 @login_required
 def logout():
+    """Logout the user"""
     logout_user()
     flash("Logged out succesfully :)")
     return redirect("/")
