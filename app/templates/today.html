@@ -90,6 +90,7 @@
                 </tr>
                 {% for task in personal_tasks %}
                 <tr>
+                    <form method = "POST" action = "/today">
                     <td><input type = "checkbox" class = "checkbox" name = "task" value = "{{ task.id }}"></td>
                     <label for="{{ task.id }}"><td>{{ task.name }}</td></label>
                     <td>{{ task.description }}</td>

@@ -124,6 +124,12 @@ def calendar():
     return render_template("calendar.html", form=form, events=events)
 
 
+'''@app.route("/calendar/<int:i>", methods=["GET", "POST"])
+@login_required
+def event(i):'''
+
+
+
 @app.route("/school", methods=["GET", "POST"])
 @login_required
 def school_task():
@@ -400,6 +406,7 @@ def profile():
             session['colour'] = current_user.colour
             print(session['colour'])
     return render_template("profile.html", username_original=username_original, email_original=email_original, colour=colour)
+
 
 @app.route("/logout")
 @login_required

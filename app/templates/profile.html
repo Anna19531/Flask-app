@@ -3,7 +3,7 @@
 
 <h2> Profile </h2>
 
-{% with messages = get_flashed_messages() %}
+{% with messages = get_flashed_messages() %} 
         {% if messages %}
             <ul class=flashes>
             {% for message in messages %}
@@ -18,7 +18,7 @@
 
 <h4> Settings </h4>
 
-<form method = "POST" action = "/profile">
+<form method = "POST" action = "/profile" class = "form">
     <h4> Change Password </h4>
     <input type = hidden name = "action" value = "password">
     <input type = password name = "password" placeholder = "New Password"> </input>
@@ -41,4 +41,19 @@
 </form>
 
 
+<form method = "POST" action = "/profile">
+    <h4> Theme colour </h4>
+    <input type = hidden name = "action" value = "colour">
+    <input type = color name = "colour"> Choose colour: </input>
+    <input type = submit value = "Save">
+ </form>
+
+
+
 {% endblock %}
+
+<style>
+    .form {
+        border-color: <style>#7e1111</style>;
+    }
+</style>

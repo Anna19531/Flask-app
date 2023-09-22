@@ -12,7 +12,7 @@
         {% endif %}
     {% endwith %}
     <div class = "flex-container">
-        <div class = "flex-item w3-card">
+        <div class = "flex-item" style = "border:'{{ colour }}'">
             <h3 style = "text-align:center"> Login </h3>
             <div style = "margin:10px"><form method = "POST" action = "/" class = "w3-container"></div>
                 {{ login_form.csrf_token }}
@@ -25,7 +25,7 @@
             </form>
         </div>
 
-        <div class = "flex-item w3-card">
+        <div class = "flex-item">
             <h3 style = "text-align:center"> Create Account </h3>
             <div style = "margin:10px"><form method = "POST" action = "/" class = "w3-container"></div>
                 {{ acc_form.csrf_token }}

@@ -17,7 +17,6 @@ class Task(db.Model):
     date = db.Column(db.Date)
     type = db.Column(db.String(144), nullable=False)
     hours = db.Column(db.Integer, nullable=False)
-    #category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     today = db.Column(db.Boolean)
@@ -30,6 +29,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String)
     streak = db.Column(db.Integer, default = 0)
     total = db.Column (db.Integer, default = 0)
+    colour = db.Column(db.String, default = "#357DED")
 
     def __repr__(self):
         return self.username

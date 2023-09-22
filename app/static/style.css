@@ -202,7 +202,6 @@ header .current-date{
 .flex-item {
   border: 1px solid #357ded;
   padding: 20px;
-  border-radius: 20px;
 
 }
 
@@ -295,4 +294,14 @@ header .current-date{
   border-color: #357ded;
 }
 
-/* Checkbox CSS */
+/* Dark Mode */
+
+body.dark-mode {
+  background-color: #22303C;
+  color: #ffffff;
+}
+
+.navbar {
+  background-color: #22303C;
+  color: #ffffff;
+}
