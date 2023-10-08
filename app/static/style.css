@@ -5,14 +5,34 @@
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
-/*body{
-  display: flex;
-  padding: 0 10px;
-  justify-content: center;
-  min-height: 100vh;
-  background: #9B59B6;
-}*/
 
+:root {
+  --dark-background-color:#22303c;
+  --dark-color: #ffffff;
+}
+/* Light theme */
+body{
+  --background-color:#f4f4f6;
+  --color: #001b00;
+  margin: 60px;
+
+  background: var(--background-color);
+  color: var(--color);
+  
+}
+
+/* Dark theme */
+body.theme-dark {
+  --background-color: var(--dark-background-color);
+  --color: var(--dark-color);
+}
+
+@media (prefers-color-scheme: dark) {
+  body.theme-auto {
+    --background-color: var(--dark-background-color);
+    --color: var(--dark-color);
+  }
+}
 /* Need to fix flash css so that nothing is displayed when there is no flash message */
 /*.flash{
   border: 1px solid #efcead;
@@ -23,6 +43,10 @@
   border-radius: 10px; 
   animation: fade-in 2s ease;
 }*/
+
+.h2 {
+  margin: 10px;
+}
 
 /* Background of calendar */
 
@@ -111,8 +135,12 @@ header .current-date{
   transform: translate(-50%, -50%);
 }
 .days li.active::before{
-  background: #9B59B6;
+  background: #357ded;
 }
+/*.days li.eventDay::before{ 
+  border-style: solid;
+  border-color: black;
+}*/
 .days li:not(.active):hover::before{
   background: #f2f2f2;
 }
@@ -188,20 +216,20 @@ header .current-date{
   transition: 0.5s;
 }
 
-/*flex container for login page */
+/*flex container for login and days page */
 
 .flex-container {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
   align-items: flex-start;
-  margin-top:10%;
+  margin-top:10px;
   vertical-align: text-top;
 }
 
 .flex-item {
   border: 1px solid #357ded;
-  padding: 20px;
+  padding: 10px;
 
 }
 
@@ -304,4 +332,14 @@ body.dark-mode {
 .navbar {
   background-color: #22303C;
   color: #ffffff;
+}
+
+/* Tables */
+
+.w3-table {
+  margin: 10px;
+}
+
+.container {
+  display: flex;
 }

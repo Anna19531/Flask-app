@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h2> Profile </h2>
+<h2 class = "h2"> Profile </h2>
 
 {% with messages = get_flashed_messages() %} 
         {% if messages %}
@@ -48,12 +48,35 @@
     <input type = submit value = "Save">
  </form>
 
-
-
+ <div class="select">
+    <select class="select__input" id="selTheme">
+        <option value="auto">Auto</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+    </select>
+</div>
 {% endblock %}
 
-<style>
-    .form {
-        border-color: <style>#7e1111</style>;
+<script>
+    function applyTheme(theme) {
+    document.body.classList.remove("theme-auto", "theme-light", "theme-dark");
+    document.body.classList.add(`theme-${theme}`);
+    console.log(theme)
     }
-</style>
+
+    document.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem("theme") || "auto";
+
+    applyTheme(savedTheme);
+
+    for (const optionElement of document.querySelectorAll("#selTheme option")) {
+        optionElement.selected = savedTheme === optionElement.value;
+    }
+
+    document.querySelector("#selTheme").addEventListener("change", function () {
+        localStorage.setItem("theme", this.value);
+        applyTheme(this.value);
+    });
+    });
+
+</script>

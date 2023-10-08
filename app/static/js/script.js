@@ -83,7 +83,7 @@ function loadEvents() {
     currentDate.innerText = `${months[currMonth]} ${currYear}`; // passing current mon and yr as currentDate text
     daysTag.innerHTML = liTag;
 }
-
+z
 
     let events = [];
 

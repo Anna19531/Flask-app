@@ -18,7 +18,7 @@
         <p> You've been productive for {{ streak }} days!</p>
     {% endif %}
 
-    <h2>Today</h2>
+    <h2 class = "h2">Today</h2>
 
     <h4> Select hours for school and personal tasks </h4>
     <form method = "POST" action = "/today">
@@ -45,102 +45,85 @@
 
 
     <div class = "flex-container">
-        <div class = "w3-card" style = "width:40%">
-            <h4 class = "w3-container"> School </h4>
-            <table class = "w3-table w3-striped">
-                <tr>
-                    <th>Done?</th>
-                    <th>Task</th>
-                    <th>Description</th>
-                    <th>Date</th>
-                    <th>Type</th>
-                    <th>Event</th>
-                    <th>Hours</th>
-                </tr>
-                {% for task in school_tasks %}
+            <div class = "w3-card" style = "width:40%">
+                <h4 class = "w3-container"> School </h4>
+                <table class = "w3-table w3-striped">
+                    <tr>
+                        <th>Done?</th>
+                        <th>Task</th>
+                        <th>Description</th>
+                        <th>Hours</th>
+                    </tr>
+                    {% for task in school_tasks %}
 
-                <tr>
-                    <form method = "POST" action = "/today">
-                    <!-- BUGGG - if only personal task in list, can't move to completed -->
-                    <td><input type = "checkbox" class = "checkbox" name = "task" value = "{{ task.id }}"></td>
-                    <label for="{{ task.id }}"><td>{{ task.name }}</td></label>
-                    <td>{{ task.description }}</td>
-                    <td>{{ task.date }}</td>
-                    <td>{{ task.type }}</td>
-                    <td>{{ task.event }}</td>
-                    <td>{{ task.hours }}</td>
-                </tr>
-                {% endfor %}
-            </table>
+                    <tr>
+                        <form method = "POST" action = "/today">
+                        <!-- BUGGG - if only personal task in list, can't move to completed -->
+                        <td><input type = "checkbox" class = "checkbox" name = "task" value = "{{ task.id }}"></td>
+                        <label for="{{ task.id }}"><td>{{ task.name }}</td></label>
+                        <td>{{ task.description }}</td>
+                        <td>{{ task.hours }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+            <br>
+
+                <h4 class = "w3-container"> Personal </h4>
+                <table class = "w3-table w3-striped">
+                    <tr>
+                        <th>Done?</th>
+                        <th>Task</th>
+                        <th>Description</th>
+                        <th>Hours</th>
+                    </tr>
+                    {% for task in personal_tasks %}
+                    <tr>
+                        <form method = "POST" action = "/today">
+                        <td><input type = "checkbox" class = "checkbox" name = "task" value = "{{ task.id }}"></td>
+                        <label for="{{ task.id }}"><td>{{ task.name }}</td></label>
+                        <td>{{ task.description }}</td>
+                        <td>{{ task.hours }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                
+        <input type = "hidden" name = "action" value = "done">
+        <input type = "submit" value = "Submit">
+        </form> 
         </div>
+
 
         <br>
 
+        <br>
         <div class = "w3-card" style = "width:40%">
-            <h4 class = "w3-container"> Personal </h4>
+            <h4 class = "w3-container"> Completed </h4>
             <table class = "w3-table w3-striped">
                 <tr>
                     <th>Done?</th>
                     <th>Task</th>
                     <th>Description</th>
-                    <th>Date</th>
-                    <th>Type</th>
-                    <th>Event</th>
                     <th>Hours</th>
                 </tr>
-                {% for task in personal_tasks %}
+                {% for task in completed %}
                 <tr>
-                    <form method = "POST" action = "/today">
-                    <td><input type = "checkbox" class = "checkbox" name = "task" value = "{{ task.id }}"></td>
+                    <td><form method = "POST" action = "/today"><input type = "checkbox" class = "checkbox" name = "task_done" value = "{{ task.id }}" checked></td>
                     <label for="{{ task.id }}"><td>{{ task.name }}</td></label>
                     <td>{{ task.description }}</td>
-                    <td>{{ task.date }}</td>
-                    <td>{{ task.type }}</td>
-                    <td>{{ task.event }}</td>
                     <td>{{ task.hours }}</td>
                 </tr>
                 {% endfor %}
             </table>
+            
+            <input type = "hidden" name = "action" value = "done">
+            <input type = "submit" value = "Submit">
+            </form> 
         </div>
+
+
+        <br>
     </div>
-
-    <br>
-
-    <input type = "hidden" name = "action" value = "done">
-    <input type = "submit" value = "Submit">
-    </form> 
-    <br>
-    <div class = "w3-card" style = "width:40%">
-        <h4 class = "w3-container"> Completed </h4>
-        <table class = "w3-table w3-striped">
-            <tr>
-                <th>Done?</th>
-                <th>Task</th>
-                <th>Description</th>
-                <th>Date</th>
-                <th>Type</th>
-                <th>Event</th>
-                <th>Hours</th>
-            </tr>
-            {% for task in completed %}
-            <tr>
-                <td><form method = "POST" action = "/today"><input type = "checkbox" class = "checkbox" name = "task_done" value = "{{ task.id }}" checked></td>
-                <label for="{{ task.id }}"><td>{{ task.name }}</td></label>
-                <td>{{ task.description }}</td>
-                <td>{{ task.date }}</td>
-                <td>{{ task.type }}</td>
-                <td>{{ task.event }}</td>
-                <td>{{ task.hours }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-
-    <br>
-
-    <input type = "hidden" name = "action" value = "undone">
-    <input type = "submit" value = "Submit"> </form>
-
 </body>
 </html>
 {% endblock %}

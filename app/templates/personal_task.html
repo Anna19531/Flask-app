@@ -10,8 +10,7 @@
 {% extends "layout.html" %}
 {% block content %}
 <body>
-
-    <h2>Personal Tasks</h2>
+    <h2 class = "h2">Personal Tasks</h2>
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -48,14 +47,13 @@
     <br>
 
     <div class = "task-flex-container">
+        <h5>Urgent</h5>
         <div class = "w3-card w3-container" style = "width:50%">
-            <h5>Urgent</h5>
             <table class = "w3-table w3-striped">
                 <tr>
                     <th>Task</th>
                     <th>Description</th>
                     <th>Date</th>
-                    <th>Type</th>
                     <th>Event</th>
                     <th>Hours</th>
                     <th>Edit?</th>
@@ -66,7 +64,6 @@
                     <td>{{ task.name }}</td>
                     <td>{{ task.description }}</td>
                     <td>{{ task.date }}</td>
-                    <td>{{ task.type }}</td>
                     <td>{{ task.event }}</td>
                     <td>{{ task.hours }}</td>
                     <td>
@@ -115,7 +112,6 @@
                     <th>Task</th>
                     <th>Description</th>
                     <th>Date</th>
-                    <th>Type</th>
                     <th>Event</th>
                     <th>Hours</th>
                     <th>Edit?</th>
@@ -126,7 +122,6 @@
                     <td>{{ task.name }}</td>
                     <td>{{ task.description }}</td>
                     <td>{{ task.date }}</td>
-                    <td>{{ task.type }}</td>
                     <td>{{ task.event }}</td>
                     <td>{{ task.hours }}</td>
                     <td>
@@ -176,7 +171,6 @@
                     <th>Task</th>
                     <th>Description</th>
                     <th>Date</th>
-                    <th>Type</th>
                     <th>Event</th>
                     <th>Hours</th>
                     <th>Edit?</th>
@@ -187,7 +181,6 @@
                     <td>{{ task.name }}</td>
                     <td>{{ task.description }}</td>
                     <td>{{ task.date }}</td>
-                    <td>{{ task.type }}</td>
                     <td>{{ task.event }}</td>
                     <td>{{ task.hours }}</td>
                     <td>
