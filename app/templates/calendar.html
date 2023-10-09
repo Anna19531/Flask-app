@@ -5,11 +5,11 @@
 
 	<h2 class = "h2"> Calendar </h2>
 
-	{% with messages = get_flashed_messages() %}
+	{% with messages = get_flashed_messages(with_categories=true) %} 
 		{% if messages %}
 			<ul class=flashes>
-			{% for message in messages %}
-			<li>{{ message }}</li>
+			{% for category, message in messages %}
+			<li class = "{{ category }}">{{ message }}</li>
 			{% endfor %}
 			</ul>
 		{% endif %}
@@ -65,7 +65,7 @@
 	<h2 class = "h2"> Upcoming Events </h2>
 	<div class = "flex-container">
 		{% for event in upcoming %}
-		<table class = "w3-table w3-card" style = "width: 30%">
+		<table class = "w3-table w3-card event-item">
 			<tr>
 				<th>
 					{{ event.name }}

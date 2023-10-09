@@ -16,6 +16,7 @@
 <header>
     <div>
         <nav class="navbar w3-bar w3-blue">
+            {% if current_user.is_authenticated %}
             <!-- <div class="navbar_links"> -->
                 <a href="/calendar" class = "w3-bar-item w3-btn w3-mobile">Calendar</a>
                 <!-- <div class="dropdown"> -->
@@ -30,6 +31,7 @@
                 </div>
                 <a href="/profile" class = "w3-bar-item w3-btn w3-mobile">Profile</a>
                 <a href="/logout" class = "w3-bar-item w3-btn w3-mobile">Logout</a>
+                {% endif %}
             <!-- </div> -->
     </div>
 </header>
@@ -40,6 +42,5 @@
     </div>
     <br>
     <footer class = "w3-container"> Footer!!</footer>
-    
 </body>
 </html>

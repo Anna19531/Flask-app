@@ -3,11 +3,11 @@
 
 <h2 class = "h2"> Profile </h2>
 
-{% with messages = get_flashed_messages() %} 
+{% with messages = get_flashed_messages(with_categories=true) %} 
         {% if messages %}
             <ul class=flashes>
-            {% for message in messages %}
-            <li>{{ message }}</li>
+            {% for category, message in messages %}
+            <li class = "{{ category }}">{{ message }}</li>
             {% endfor %}
             </ul>
         {% endif %}
@@ -40,43 +40,4 @@
     <input type = submit value = "Save">
 </form>
 
-
-<form method = "POST" action = "/profile">
-    <h4> Theme colour </h4>
-    <input type = hidden name = "action" value = "colour">
-    <input type = color name = "colour"> Choose colour: </input>
-    <input type = submit value = "Save">
- </form>
-
- <div class="select">
-    <select class="select__input" id="selTheme">
-        <option value="auto">Auto</option>
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
-    </select>
-</div>
 {% endblock %}
-
-<script>
-    function applyTheme(theme) {
-    document.body.classList.remove("theme-auto", "theme-light", "theme-dark");
-    document.body.classList.add(`theme-${theme}`);
-    console.log(theme)
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-    const savedTheme = localStorage.getItem("theme") || "auto";
-
-    applyTheme(savedTheme);
-
-    for (const optionElement of document.querySelectorAll("#selTheme option")) {
-        optionElement.selected = savedTheme === optionElement.value;
-    }
-
-    document.querySelector("#selTheme").addEventListener("change", function () {
-        localStorage.setItem("theme", this.value);
-        applyTheme(this.value);
-    });
-    });
-
-</script>

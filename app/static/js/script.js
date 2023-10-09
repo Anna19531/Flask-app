@@ -23,8 +23,8 @@ const renderCalendar = () => {
         liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
     }
 
- // function to get event name to display in calendar
- function getEventName(day, events) {
+ // function to get event colour to display in calendar
+function getEventColour(day, events) {
     const event = events.find(event => {
         const eventDate = new Date(event.date);
         const eventDay = eventDate.getDate();
@@ -33,22 +33,8 @@ const renderCalendar = () => {
         return eventDay === day && eventMonth === currMonth && eventYear === currYear;
         
     });
-
-    return event ? event.name : "";
-    }
-
- function getEventID(day, events) {
-    const event = events.find(event => {
-        const eventDate = new Date(event.date);
-        const eventDay = eventDate.getDate();
-        const eventMonth = eventDate.getMonth();
-        const eventYear = eventDate.getFullYear();
-        return eventDay === day && eventMonth === currMonth && eventYear === currYear;
-        
-    });
-
-    console.log(event.id)
-    return event ? event.id : "";
+    console.log(event ? event.colour : "")
+    return event ? event.colour : "";
     }
 
 
@@ -57,23 +43,43 @@ function loadEvents() {
         // adding active class to li if the current day, month, and year matched
        let isToday = i === date.getDate() && currMonth === new Date().getMonth() && currYear === new Date().getFullYear() ? "active" : "";
        let hasEvent = false;
-       events.forEach(event => {
-           const eventDate = new Date(event.date);
-           const eventDay = eventDate.getDate();
-           const eventMonth = eventDate.getMonth();
-           const eventYear = eventDate.getFullYear();
-   
-           if (eventDay === i && eventMonth === currMonth && eventYear === currYear) {
-               hasEvent = true;
-           }
-        });
-
-        if (hasEvent == true) {
-            liTag += `<li class="${isToday}${hasEvent ? " event" : ""}">${i}\n${hasEvent ? `<button onclick = "openEditForm(${getEventID(i, events)})" class="event-name" id = "myEditForm">${getEventName(i, events)}</button>` : ""}</li>`;
-        }
-        else {
-            liTag += `<li class="${isToday}${hasEvent ? " event" : ""}">${`<a href = "{{ url_for('')}}"`}\n${hasEvent ? `<span class="event-name">${getEventName(i, events)}</span>`: ""}</li>`;
-        }
+       let currDateYear = new Date(currYear, currMonth, i).getFullYear();
+       let currDateMonth = new Date(currYear, currMonth, i).getMonth() + 1;
+       let currDateDay = new Date(currYear, currMonth, i).getDate();
+       // need month and day to be in format 0x e.g. 09 not 9
+       if (currDateMonth < 10 && currDateDay < 10) {
+        var formattedDate = `${currDateYear}-0${currDateMonth}-0${currDateDay}`
+       }
+       else if (currDateMonth < 10) {
+        var formattedDate = `${currDateYear}-0${currDateMonth}-${currDateDay}`
+       }
+       else if (currDateDay < 10) {
+        var formattedDate = `${currDateYear}-${currDateMonth}-0${currDateDay}`
+       }
+       else {
+        var formattedDate = `${currDateYear}-${currDateMonth}-${currDateDay}`
+       }
+        events.forEach(event => {
+            const eventDate = new Date(event.date);
+            const eventDay = eventDate.getDate();
+            const eventMonth = eventDate.getMonth();
+            const eventYear = eventDate.getFullYear();
+    
+            if (eventDay === i && eventMonth === currMonth && eventYear === currYear) {
+                hasEvent = true;
+            }
+         });
+ 
+         if (hasEvent == true) {
+             colour = getEventColour(i, events)
+             liTag += `<li style = "color: ${getEventColour(i, events)}" class="${"eventDay"}${isToday}${hasEvent ? " event" : ""}">\n${`<a href = "/calendar/${formattedDate}"> ${i} </a>`}</li>`;
+             var styleElem = document.head.appendChild(document.createElement("style"));
+             styleElem.innerHTML = ".days li.eventDay::before {border-style: solid; border-color: ${colour}};}";
+         }
+         else {
+             liTag += `<li class="${isToday}${hasEvent ? " event" : ""}">\n${`<a href = "/calendar/${formattedDate}"> ${i} </a>`}</li>`;
+         } 
+        
    }
 
    for (let i = lastDayofMonth; i < 6; i++) { // creating li of next month first days
@@ -83,7 +89,6 @@ function loadEvents() {
     currentDate.innerText = `${months[currMonth]} ${currYear}`; // passing current mon and yr as currentDate text
     daysTag.innerHTML = liTag;
 }
-z
 
     let events = [];
 

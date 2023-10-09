@@ -2,14 +2,15 @@
 {% block content %}
 
 <body>
-
+<!-- What happens if you delete a task in the today list -->
+<!-- BUG - if you delete a task, take it off the today list -->
     <h2 class = "h2"> School Tasks</h2>
 
-    {% with messages = get_flashed_messages() %}
+    {% with messages = get_flashed_messages(with_categories=true) %} 
         {% if messages %}
             <ul class=flashes>
-            {% for message in messages %}
-            <li>{{ message }}</li>
+            {% for category, message in messages %}
+            <li class = "{{ category }}">{{ message }}</li>
             {% endfor %}
             </ul>
         {% endif %}

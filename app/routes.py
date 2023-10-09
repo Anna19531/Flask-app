@@ -62,20 +62,21 @@ def home():
             # in the database
             if user and check_password_hash(user.password, password):
                 login_user(user, remember=remember)
-                flash("Logged in successfully :)")
+                flash("Logged in successfully :)", "success")
                 return redirect(url_for("calendar"))
             else:
-                flash("Incorrect username or password :(")
+                flash("Incorrect username or password :(", "error")
         else:
             # checking if the email or username
             # is already being used by another user
             if acc_form.email.data in [
                user.email for user in User.query.all()]:
                 flash(
-                    "Email already taken, please use another one")
+                    "Email already taken, please use another one", "error")
             elif acc_form.username.data in [
                  user.username for user in User.query.all()]:
-                flash("Username already taken, please use another one")
+                flash(
+                    "Username already taken, please use another one", "error")
             else:
                 new_user = models.User()
                 new_user.username = acc_form.username.data
@@ -86,7 +87,7 @@ def home():
                 new_user.email = acc_form.email.data
                 db.session().add(new_user)
                 db.session().commit()
-                flash("Account created :)")
+                flash("Account created :)", "success")
     return render_template(
         "home.html", login_form=login_form, acc_form=acc_form, colour=colour)
 
@@ -119,7 +120,7 @@ def calendar():
             new_event.user_id = current_user.id
             db.session().add(new_event)
             db.session().commit()
-            flash("Event added :)")
+            flash("Event added :)", "success")
             return redirect(url_for("calendar"))
         # editing an existing event
         elif action == "edit":
@@ -132,7 +133,7 @@ def calendar():
             event.colour = form.colour.data
             event.user_id = current_user.id
             db.session().commit()
-            flash("Event edited :)")
+            flash("Event edited :)", "success")
             return redirect(url_for("calendar"))
         # deleting an event
         elif action == "delete":
@@ -141,7 +142,7 @@ def calendar():
             event = Event.query.get(id)
             db.session.delete(event)
             db.session().commit()
-            flash("Event deleted :)")
+            flash("Event deleted :)", "success")
             return redirect(url_for("calendar"))
     return render_template(
         "calendar.html", form=form, events=events, upcoming=upcoming)
@@ -168,7 +169,7 @@ def event(formattedDate):
             new_event.user_id = current_user.id
             db.session().add(new_event)
             db.session().commit()
-            flash("Event added :)")
+            flash("Event added :)", "success")
             return redirect(url_for("calendar"))
         # editing an existing event
         elif action == "edit":
@@ -181,7 +182,7 @@ def event(formattedDate):
             event.colour = form.colour.data
             event.user_id = current_user.id
             db.session().commit()
-            flash("Event edited :)")
+            flash("Event edited :)", "success")
             return redirect(url_for("calendar"))
         # deleting an event
         elif action == "delete":
@@ -190,7 +191,7 @@ def event(formattedDate):
             event = Event.query.get(id)
             db.session.delete(event)
             db.session().commit()
-            flash("Event deleted :)")
+            flash("Event deleted :)", "success")
             return redirect(url_for("calendar"))
 
     events = Event.query.filter_by(date=formattedDate).filter_by(
@@ -239,7 +240,7 @@ def school_task():
             new_task.user_id = current_user.id
             db.session().add(new_task)
             db.session().commit()
-            flash("Task added :)")
+            flash("Task added :)", "success")
             return redirect(url_for("school_task"))
         # editing an existing task
         elif action == "edit":
@@ -254,7 +255,7 @@ def school_task():
             task.hours = form.hours.data
             task.user_id = current_user.id
             db.session().commit()
-            flash("Task edited :)")
+            flash("Task edited :)", "success")
             return redirect(url_for("school_task"))
         # deleting a task
         elif action == "delete":
@@ -263,7 +264,7 @@ def school_task():
             task = Task.query.get(id)
             db.session.delete(task)
             db.session().commit()
-            flash("Task deleted :)")
+            flash("Task deleted :)", "success")
             return redirect(url_for("school_task"))
     return render_template("school_task.html", form=form, urgent=urgent,
                            coming_up=coming_up, not_urgent=not_urgent)
@@ -306,7 +307,7 @@ def personal_task():
             new_task.user_id = current_user.id
             db.session().add(new_task)
             db.session().commit()
-            flash("Task added :)")
+            flash("Task added :)", "success")
             return redirect(url_for("personal_task"))
         # editing an existing task
         elif action == "edit":
@@ -321,7 +322,7 @@ def personal_task():
             task.hours = form.hours.data
             task.user_id = current_user.id
             db.session().commit()
-            flash("Task edited :)")
+            flash("Task edited :)", "success")
             return redirect(url_for("personal_task"))
         # deleting a task
         elif action == "delete":
@@ -330,7 +331,7 @@ def personal_task():
             task = Task.query.get(id)
             db.session.delete(task)
             db.session().commit()
-            flash("Task deleted :)")
+            flash("Task deleted :)", "success")
             return redirect(url_for("personal_task"))
     return render_template("personal_task.html", urgent=urgent,
                            coming_up=coming_up, not_urgent=not_urgent,
@@ -385,7 +386,7 @@ def today():
             if personal_hours is None:
                 personal_hours = 0
             if len(Task.query.filter_by(user_id=current_user.id).all()) == 0:
-                flash("Please add some tasks to do")
+                flash("Please add some tasks to do", "error")
             else:
                 for task in Task.query.order_by(Task.date).filter_by(
                  user_id=current_user.id).all():
@@ -469,9 +470,9 @@ def profile():
                 user.password = generate_password_hash(
                     password, method="scrypt")
                 db.session().commit()
-                flash("Password changed :)")
+                flash("Password changed :)", "success")
             else:
-                flash("Passwords don't match :(")
+                flash("Passwords don't match :(", "error")
             redirect(url_for("profile"))
         # changing username
         elif action == "username":
@@ -479,13 +480,14 @@ def profile():
             username = request.form["username"]
             # checking if username is already being used by another user
             if username in [user.username for user in User.query.all()]:
-                flash("Username already taken, please use another one")
+                flash(
+                    "Username already taken, please use another one", "error")
                 username = username_original
             else:
                 user = User.query.get(current_user.id)
                 user.username = username
                 db.session().commit()
-                flash("Username changed :)")
+                flash("Username changed :)", "success")
             redirect(url_for("profile"))
         # changing email
         elif action == "email":
@@ -493,12 +495,12 @@ def profile():
             email = request.form["email"]
             # checking if username is already being used by another user
             if email in [user.email for user in User.query.all()]:
-                flash("Email already taken, please use another one")
+                flash("Email already taken, please use another one", "error")
             else:
                 user = User.query.get(current_user.id)
                 user.email = email
                 db.session().commit()
-                flash("Email changed :)")
+                flash("Email changed :)", "success")
             redirect(url_for("profile"))
     return render_template("profile.html", username_original=username_original,
                            email_original=email_original)
@@ -509,5 +511,5 @@ def profile():
 def logout():
     """Logout the user"""
     logout_user()
-    flash("Logged out succesfully :)")
+    flash("Logged out succesfully :)", "success")
     return redirect("/")

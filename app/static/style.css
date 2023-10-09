@@ -51,7 +51,7 @@ body.theme-dark {
 /* Background of calendar */
 
 .wrapper{
-  width: 60rem;
+  width: 60%;
   background: #fff;
   border-radius: 10px;
   border-style: solid;
@@ -332,7 +332,43 @@ body.dark-mode {
 .navbar {
   background-color: #22303C;
   color: #ffffff;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
 }
+
+.event-item {
+  width: 30%;
+}
+
+@media all and (max-width: 1280px) {
+  .navbar {
+    /* When on medium sized screens, we center it by evenly distributing empty space around items */
+    justify-content: space-around;
+  } 
+
+  .flex-container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+  }
+
+  .event-item {
+    width: 100%;
+    margin: 10px;
+  }
+}
+
+/* Small screens */
+@media all and (max-width: 500px) {
+  .navbar {
+    /* On small screens, we are no longer using row direction but column */
+    flex-direction: column;
+  }
+
+}
+
 
 /* Tables */
 
@@ -342,4 +378,58 @@ body.dark-mode {
 
 .container {
   display: flex;
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 10px;
+}
+
+tr {
+  align-items: center;
+
+  justify-content: center;
+  padding: 10px;
+}
+
+/* Style for the flashes class (ul) */
+ul.flashes {
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+}
+
+/* Style for the list items (li) within the flashes class */
+ul.flashes li {
+  padding: 5px;
+  margin-bottom: 5px;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  color: #333;
+  border-radius: 4px;
+}
+
+/* Additional styles for better visibility */
+ul.flashes li.success {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #3c763d;
+}
+
+ul.flashes li.error {
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  color: #a94442;
+}
+
+/* Keyframes for the fade-out animation */
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
 }

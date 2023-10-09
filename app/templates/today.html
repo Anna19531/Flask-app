@@ -2,11 +2,11 @@
 {% block content %}
 <body>
 
-    {% with messages = get_flashed_messages() %}
+    {% with messages = get_flashed_messages(with_categories=true) %} 
         {% if messages %}
             <ul class=flashes>
-            {% for message in messages %}
-            <li>{{ message }}</li>
+            {% for category, message in messages %}
+            <li class = "{{ category }}">{{ message }}</li>
             {% endfor %}
             </ul>
         {% endif %}
@@ -47,7 +47,7 @@
     <div class = "flex-container">
             <div class = "w3-card" style = "width:40%">
                 <h4 class = "w3-container"> School </h4>
-                <table class = "w3-table w3-striped">
+                <table class = "w3-table">
                     <tr>
                         <th>Done?</th>
                         <th>Task</th>
@@ -116,7 +116,7 @@
                 {% endfor %}
             </table>
             
-            <input type = "hidden" name = "action" value = "done">
+            <input type = "hidden" name = "action" value = "undone">
             <input type = "submit" value = "Submit">
             </form> 
         </div>

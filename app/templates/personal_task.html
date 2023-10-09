@@ -11,12 +11,11 @@
 {% block content %}
 <body>
     <h2 class = "h2">Personal Tasks</h2>
-
-    {% with messages = get_flashed_messages() %}
+    {% with messages = get_flashed_messages(with_categories=true) %} 
         {% if messages %}
             <ul class=flashes>
-            {% for message in messages %}
-            <li>{{ message }}</li>
+            {% for category, message in messages %}
+            <li class = "{{ category }}">{{ message }}</li>
             {% endfor %}
             </ul>
         {% endif %}
