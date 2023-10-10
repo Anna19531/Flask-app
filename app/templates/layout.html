@@ -15,7 +15,7 @@
 
 <header>
     <div>
-        <nav class="navbar w3-bar w3-blue">
+        <nav class="navbar w3-bar">
             {% if current_user.is_authenticated %}
             <!-- <div class="navbar_links"> -->
                 <a href="/calendar" class = "w3-bar-item w3-btn w3-mobile">Calendar</a>
@@ -41,6 +41,6 @@
         {% block content %}{% endblock %}
     </div>
     <br>
-    <footer class = "w3-container"> Footer!!</footer>
+    <footer class = "w3-container"> © Annabelle Brownsword 2023</footer>
 </body>
 </html>
