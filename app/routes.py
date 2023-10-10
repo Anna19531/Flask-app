@@ -80,8 +80,6 @@ def home():
             else:
                 new_user = models.User()
                 new_user.username = acc_form.username.data
-                # "sha256" was the original method used to hash the password
-                # but this is outdated so changed to "scrypt"
                 new_user.password = generate_password_hash(
                     acc_form.password.data, method="sha256")
                 new_user.email = acc_form.email.data
@@ -511,5 +509,5 @@ def profile():
 def logout():
     """Logout the user"""
     logout_user()
-    flash("Logged out succesfully :)", "success")
+    flash("Logged out successfully :)", "success")
     return redirect("/")
