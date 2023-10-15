@@ -17,11 +17,9 @@
     <div>
         <nav class="navbar w3-bar">
             {% if current_user.is_authenticated %}
-            <!-- <div class="navbar_links"> -->
+                <a href="/dashboard" class = "w3-bar-item w3-btn w3-mobile">Dashboard</a>
                 <a href="/calendar" class = "w3-bar-item w3-btn w3-mobile">Calendar</a>
-                <!-- <div class="dropdown"> -->
                 <div class="w3-dropdown-hover">
-                    <!-- Fix the dropdown arrow -->
                     <a class="dropbtn w3-btn">Tasks <i class="material-symbols-outlined" style="font-size:16px"> expand_more </i></a>
                     <div class="w3-dropdown-content w3-bar-block w3-card-4">
                         <a href="/school" class = "w3-bar-item w3-button">School</a>
@@ -31,6 +29,13 @@
                 </div>
                 <a href="/profile" class = "w3-bar-item w3-btn w3-mobile">Profile</a>
                 <a href="/logout" class = "w3-bar-item w3-btn w3-mobile">Logout</a>
+                <!-- Change colour of select -->
+                <div class="select w3-bar-item w3-button">
+                    <select class="select__input" id="selTheme" onchange = "applyTheme()">
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                    </select>
+                </div>
                 {% endif %}
             <!-- </div> -->
     </div>

@@ -1,6 +1,6 @@
  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap'); 
 *{
-  margin: 0;
+  margin:0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
@@ -9,9 +9,14 @@
 /* Colour palette for light theme */
 :root {
   --background-color: #f4f4f6;
+  --color: #333;
   --navbar-color: #357ded;
   --navbar-text: #ffffff;
-  --footer-border: #22303c;
+  --border: #22303c;
+  --calendar-li: #333;
+  --calendar-background: #ffffff;
+  --highlight: #aaa;
+  --input-field-color: #ffffff;
 }
 
 /* Colour palette for dark theme */
@@ -20,22 +25,20 @@
   --color: #ffffff;
   --navbar-color: #1a252f;
   --navbar-text: #357ded;
-  --footer-border: #f4f4f6;
+  --border: #f4f4f6;
+  --calendar-li: #f4f4f6;
+  --calendar-background: #22303c;
+  --highlight: #808080;
+  /* --input-field-color: #424242; */
 }
 
-/* Light theme */
 body {
-  --background-color: var(--background-color);
-  --color: var(--color);
+  background-color: var(--background-color);
+  color: var(--color);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  margin: 60px;
-}
-
-body.theme-dark {
-  background-color: #22303c;
-  color: #ffffff;
+  margin: 10px;
 }
 
 .navbar {
@@ -47,45 +50,20 @@ body.theme-dark {
   padding: 10px;
 }
 
-.theme-dark {
-  --background-color: var(--dark-background-color);
-  --color: var(--dark-color);
-}
-
-/* Dark theme */
-body.theme-dark {
-  --background-color: var(--dark-background-color);
-  --color: var(--dark-color);
-}
-
-@media (prefers-color-scheme: dark) {
-  body.theme-auto {
-    --background-color: var(--dark-background-color);
-    --color: var(--dark-color);
-  }
-}
-/* Need to fix flash css so that nothing is displayed when there is no flash message */
-/*.flash{
-  border: 1px solid #efcead;
-  background-color:	#efcead;
-  color: black;
-  padding: 8px;
-  margin: 10px 50px;
-  border-radius: 10px; 
-  animation: fade-in 2s ease;
-}*/
-
 .h2 {
   margin: 10px;
+  text-align: center;
+  color: var(--color);
 }
 
 /* Background of calendar */
 
 .wrapper{
-  width: 60%;
-  background: #fff;
+  width: 80%;
+  background: var(--calendar-background);
+  border: solid;
   border-radius: 10px;
-  border-style: solid;
+  --border-color:var(--border);
   margin: auto;
   align-items: center;
 
@@ -104,7 +82,7 @@ header .icons span{
   width: 38px;
   margin: 0 1px;
   cursor: pointer;
-  color: #878787;
+  color: var(--highlight);
   text-align: center;
   line-height: 38px;
   font-size: 1.9rem;
@@ -134,7 +112,7 @@ header .current-date{
   margin-bottom: 20px;
 }
 .calendar li{
-  color: #333;
+  color: var(--calendar-li);
   width: calc(100% / 7);
   font-size: 1.07rem;
 }
@@ -168,21 +146,18 @@ header .current-date{
 .days li.active::before{
   background: #357ded;
 }
-/*.days li.eventDay::before{ 
-  border-style: solid;
-  border-color: black;
-}*/
+
 .days li:not(.active):hover::before{
-  background: #f2f2f2;
+  background: var(--highlight);
 }
 
-/* Button used to open the contact form - fixed at the bottom of the page */
+/* Button used to open the add event form - fixed at the top of the page */
 .open-button {
-  background-color: white;
-  color: black;
+  background: var(--background-color);
+  color: var(--color);
   padding: 16px 20px;
   border-style: solid; 
-  border-color: black;
+  border-color: var(--border);
   cursor: pointer;
   position: fixed;
   top: 53px;
@@ -202,21 +177,22 @@ header .current-date{
   position: fixed;
   top: 10px;
   right: 15px;
-  border: 3px solid #f1f1f1;
+  border: 1px solid;
+  border-color: var(--border);
 }
 
 /* Add styles to the form container */
 .form-container {
   max-width: 500px;
   padding: 10px;
-  background-color: white;
+  background: var(--navbar-color);
 }
 
 
 /* Set a style for the submit/login button */
 .form-container .btn {
   background-color: #04AA6D;
-  color: white;
+  color: var(--color);
   padding: 8px 8px;
   border: none;
   cursor: pointer;
@@ -229,10 +205,12 @@ header .current-date{
 /* Add a red background color to the cancel and delete button */
 .form-container .cancel {
   background-color: red;
+  color: #f4f4f6
 }
 
 .btn .delete {
   background-color: red;
+  color: #f4f4f6;
 }
 
 /* Add some hover effects to buttons */
@@ -240,6 +218,7 @@ header .current-date{
   opacity: 1;
 }
 
+/* what is this part of??? */
 .bar {
   width: 10%;
   background: #04AA6D;
@@ -272,6 +251,30 @@ header .current-date{
   box-sizing: border-box;
 }
 
+/* Flex for dashboard */
+.dashboard-flex {
+  display: flex;
+  flex-direction: row;
+  padding: 5px;
+  margin-bottom: 5px;
+
+  color: #333;
+  border-radius: 4px;
+}
+
+.dashboard-flex-item {
+  width:100%;
+}
+
+/* css for input fields */
+input[type=text], input[type=password], input[type=date], input[type=integer], input[type=number] input[type=select] input[type=email] {
+  width: 100%;
+  margin: 8px 0;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: var(--input-field-color);
+}
+
 /* CSS for flex containers in add/edit forms */
 .form-flex-container {
   display: flex;
@@ -285,7 +288,6 @@ header .current-date{
 .task-flex-container {
   display: flex;
   flex-direction: column;
-
   justify-content: space-between;
   vertical-align: text-top;
   align-items: center;
@@ -338,7 +340,7 @@ header .current-date{
 }
 
 .circle {
-  background-color: #fff;
+  background-color: var(--background-color);
   border-radius: 50%;
   height: 30px;
   width: 30px;
@@ -374,15 +376,29 @@ header .current-date{
     width: 100%;
     margin: 10px;
   }
+
+  .dashboard-flex {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 /* Small screens */
-@media all and (max-width: 500px) {
+@media all and (max-width: 600px) {
   .navbar {
     /* On small screens, we are no longer using row direction but column */
     flex-direction: column;
   }
 
+  .task w3-table th:nth-child(3),
+  .task w3-table td:nth-child(3),
+  .task w3-table th:nth-child(4),
+  .task w3-table td:nth-child(4) {
+    display: none;
+  }
+
+  
 }
 
 
@@ -439,6 +455,15 @@ ul.flashes li.error {
   color: #a94442;
 }
 
+.streak {
+  padding: 5px;
+  margin-bottom: 5px;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  color: #333;
+  border-radius: 4px;
+}
+
 /* Keyframes for the fade-out animation */
 @keyframes fadeOut {
   0% {
@@ -454,16 +479,114 @@ ul.flashes li.error {
 
 footer {
   margin-top: auto;
-  padding-top: 10px;
-  border-top:1px solid;
-  --background-color: var(--navbar-color);
-  --color: var(--navbar-text);
-  --border-top: 1px solid var(--footer-border);
+  padding-top: 20px;
+  background-color: var(--background-color);
+  color: var(--color);
+  border-top: 1px solid;
+  border-top-color: var(--border);
 
 }
 
-footer.theme-dark {
-  background-color:#22303c;
-  color: #ffffff;
-  border-top: #f4f4f6;
+/* w3-table CSS */
+table {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  table-layout: fixed;
+}
+
+table caption {
+  font-size: 1.5em;
+  margin: .5em 0 .75em;
+}
+
+table tr {
+  background-color: var(--background-color);
+  border: 1px solid #ddd;
+  padding: .35em;
+  color: var(--color);
+}
+
+table th,
+table td {
+  padding: .625em;
+  text-align: center;
+}
+
+table th {
+  font-size: .85em;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+@media screen and (max-width: 600px) {
+  table {
+    border: 0;
+  }
+
+  table caption {
+    font-size: 1.3em;
+  }
+  
+  table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  
+  table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: .625em;
+  }
+  
+  table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: .8em;
+    text-align: right;
+  }
+  
+  table td::before {
+    /*
+    * aria-label has no advantage, it won't be read inside a table
+    content: attr(aria-label);
+    */
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  table td:last-child {
+    border-bottom: 0;
+  }
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 40% 40% ;
+  /*grid-template-rows: 20% 20% 20%;*/
+  grid-auto-flow: column;
+}
+
+.item-1 {
+  grid-column: 1;
+  grid-row: 1 / 3;
+}
+.item-2 {
+  grid-column: 2;
+  grid-row: 1 / 3;
+}
+
+.item-3 {
+  grid-column: 2;
+  grid-row: 3 / 5;
 }

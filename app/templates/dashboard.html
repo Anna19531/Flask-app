@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2 class = "h2"> Dashboard </h2>
+
+{% with messages = get_flashed_messages(with_categories=true) %} 
+    {% if messages %}
+        <ul class=flashes>
+        {% for category, message in messages %}
+        <li class = "{{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
+<div class = "streak">
+    {% if streak == 1 %}
+        <p> You've been productive for {{ streak }} day!</p>
+    {% else %}
+        <p> You've been productive for {{ streak }} days!</p>
+    {% endif %}
+</div>
+
+<br>
+
+<div class = "dashboard-flex">
+    <div class = "dashboard-flex-item">
+        <h2 class = "h2"> Upcoming Events </h2>
+        <div class = "flex-container">
+            {% for event in upcoming %}
+            <table class = "w3-table w3-card event-item">
+                <tr style = "border-bottom: 1px solid;">
+                    <th>
+                        {{ event.name }}
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        Description:
+                    </th>
+                    <td>
+                        {{ event.description }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Date:
+                    </th>
+                    <td>
+                        {{ event.date }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Colour:
+                    </th>
+                    <td>
+                        {{ event.colour }}
+                    </td>
+                </tr>
+            </table>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class = "dashboard-flex-item">
+        <h2 class = "h2"> Today's Tasks</h2>
+        <div class = "flex-container">
+            <h4 class = "w3-container"> School </h4>
+            {% for task in school_tasks %}
+            <table class = "w3-table w3-card event-item">
+                <tr style = "border-bottom: 1px solid;">
+                    <th>
+                        {{ task.name }}
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        Description:
+                    </th>
+                    <td>
+                        {{ task.description }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Hours:
+                    </th>
+                    <td>
+                        {{ task.hours }}
+                    </td>
+                </tr>
+            </table>
+            {% endfor %}
+        </div>
+
+        <br>
+        
+        <div class = "flex-container">
+            <h4 class = "w3-container"> Personal </h4>
+            {% for task in personal_tasks %}
+                <table class = "w3-table w3-card event-item">
+                    <tr style = "border-bottom: 1px solid;">
+                        <th>
+                            {{ task.name }}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            Description:
+                        </th>
+                        <td>
+                            {{ task.description }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Hours:
+                        </th>
+                        <td>
+                            {{ task.hours }}   
+                        </td>
+                    </tr>
+                </table>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

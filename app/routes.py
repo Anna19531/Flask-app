@@ -63,7 +63,7 @@ def home():
             if user and check_password_hash(user.password, password):
                 login_user(user, remember=remember)
                 flash("Logged in successfully :)", "success")
-                return redirect(url_for("calendar"))
+                return redirect(url_for("dashboard"))
             else:
                 flash("Incorrect username or password :(", "error")
         else:
@@ -88,6 +88,28 @@ def home():
                 flash("Account created :)", "success")
     return render_template(
         "home.html", login_form=login_form, acc_form=acc_form, colour=colour)
+
+
+@app.route("/dashboard", methods=["GET", "POST"])
+@login_required
+def dashboard():
+    # events to be displayed
+    events = Event.query.filter_by(user_id=current_user.id).order_by(
+        Event.date).all()
+    upcoming = []
+    for event in events:
+        if len(upcoming) < 3:
+            upcoming.append(event)
+    # tasks to be displayed
+    school_tasks = Task.query.filter_by(today=True).filter_by(
+        user_id=current_user.id).filter_by(type=1).order_by(Task.date).all()
+    personal_tasks = Task.query.filter_by(today=True).filter_by(
+        user_id=current_user.id).filter_by(type=2).order_by(Task.date).all()
+    # display user streak
+    streak = current_user.streak
+    return render_template("dashboard.html", upcoming=upcoming,
+                           school_tasks=school_tasks,
+                           personal_tasks=personal_tasks, streak=streak)
 
 
 @app.route("/calendar", methods=["GET", "POST"])

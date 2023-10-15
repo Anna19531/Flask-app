@@ -23,23 +23,32 @@
     <input type = hidden name = "action" value = "password">
     <input type = password name = "password" placeholder = "New Password"> </input>
     <input type = password name = "password2" placeholder = "Confirm New Password"> </input>
-    <input type = submit value = "Save">
+    <div>
+        <input type = submit value = "Save" class = "w3-button">
+    </div>
 </form>
 
 <form method = "POST" action = "/profile">
     <h4> Change Username </h4>
     <input type = hidden name = "action" value = "username">
     <input type = text name = "username" placeholder = "New Username"> </input>
-    <input type = submit value = "Save">
+    <div>
+        <input type = submit value = "Save" class = "w3-button">
+    </div>
 </form>
 
 <form method = "POST" action = "/profile">
     <h4> Change Email </h4>
     <input type = hidden name = "action" value = "email">
     <input type = email name = "email" placeholder = "New Email"> </input>
-    <input type = submit value = "Save">
+    <div>
+        <input type = submit value = "Save" class = "w3-button">
+    </div>
 </form>
 
+<br>
+
+<p> Select Theme</p>
 <div class="select">
     <select class="select__input" id="selTheme" onchange = "applyTheme()">
         <option value="auto">Auto</option>
