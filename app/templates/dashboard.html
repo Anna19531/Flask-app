@@ -13,6 +13,7 @@
     {% endif %}
 {% endwith %}
 
+<div class = "margin">
 <div class = "streak">
     {% if streak == 1 %}
         <p> You've been productive for {{ streak }} day!</p>
@@ -26,6 +27,9 @@
 <div class = "dashboard-flex">
     <div class = "dashboard-flex-item">
         <h2 class = "h2"> Upcoming Events </h2>
+        {% if upcoming|length < 1 %}
+            <h4> No upcoming events - add events on the calendar page</h4>
+        {% else %}
         <div class = "flex-container">
             {% for event in upcoming %}
             <table class = "w3-table w3-card event-item">
@@ -62,11 +66,15 @@
             {% endfor %}
         </div>
     </div>
+    {% endif %}
 
     <div class = "dashboard-flex-item">
         <h2 class = "h2"> Today's Tasks</h2>
+        {% if school_tasks|length < 1 and personal_tasks|length < 1 %}
+            <h4> No tasks for today - add some tasks to do on the tasks page!</h4>
+        {% else %}
         <div class = "flex-container">
-            <h4 class = "w3-container"> School </h4>
+            <h4 class = "w3-container h4"> School </h4>
             {% for task in school_tasks %}
             <table class = "w3-table w3-card event-item">
                 <tr style = "border-bottom: 1px solid;">
@@ -97,7 +105,7 @@
         <br>
         
         <div class = "flex-container">
-            <h4 class = "w3-container"> Personal </h4>
+            <h4 class = "w3-container h4"> Personal </h4>
             {% for task in personal_tasks %}
                 <table class = "w3-table w3-card event-item">
                     <tr style = "border-bottom: 1px solid;">
@@ -124,7 +132,9 @@
                 </table>
             {% endfor %}
         </div>
+        {% endif %}
     </div>
+</div>
 </div>
 
 {% endblock %}

@@ -38,6 +38,18 @@ def serve_js():
     return jsonify([object_as_dict(event) for event in events])
 
 
+@app.route('/endpoint', methods=['POST'])
+def handle_ajax_request():
+    # Get the bodyClass from the request data
+    request_data = request.get_json()
+    body_class = request_data.get('bodyClass')
+
+    # Store the body class in the session
+    session['body_class'] = body_class
+
+    return body_class
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     """If the entered url doesn't exist, return this page"""
@@ -116,11 +128,51 @@ def dashboard():
 @login_required
 def calendar():
     """Display the calendar and add events to the calendar"""
+    body_class = session.get('body_class')
     form = EventForm()
-    # choices for the dropdown menu
-    form.colour.choices = [("#ff0000", "Red"), ("#357ded", "Blue"), (
-        "#5f8575", "Green"), ("#ff5f1f", "Orange"), (
+    if body_class == "theme-dark":
+        form.colour.choices = [("#fa7970", "Red"), ("#77bdfb", "Blue"), (
+         "#03dac5", "Green"), ("#ffffff", "White"), (
             "#7852a9", "Purple")]
+        colours = Event.query.filter_by(user_id=current_user.id).all()
+        for colour in colours:
+            if colour.colour == "#d62237":
+                colour.colour = "#fa7970"
+                db.session().commit()
+            elif colour.colour == "#1c448e":
+                colour.colour = "#77bdfb"
+                db.session().commit()
+            elif colour.colour == "#006400":
+                colour.colour = "#03dac5"
+                db.session().commit()
+            elif colour.colour == "#000000":
+                colour.colour = "#ffffff"
+                db.session().commit()
+            elif colour.colour == "#7852a9":
+                colour.colour = "#bb86fc"
+                db.session().commit()
+    else:
+        # choices for the dropdown menu
+        form.colour.choices = [("#d62237", "Red"), ("#1c448e", "Blue"), (
+            "#006400", "Green"), ("#000000", "Black"), (
+            "#bb86fc", "Purple")]
+        colours = Event.query.filter_by(user_id=current_user.id).all()
+        for colour in colours:
+            if colour.colour == "#fa7970":
+                colour.colour = "#d62237"
+                db.session().commit()
+            elif colour.colour == "#77bdfb":
+                colour.colour = "#1c448e"
+                db.session().commit()
+            elif colour.colour == "#03dac5":
+                colour.colour = "#006400"
+                db.session().commit()
+            elif colour.colour == "#ffffff":
+                colour.colour = "#000000"
+                db.session().commit()
+            elif colour.colour == "#bb86fc":
+                colour.colour = "#7852a9"
+                db.session().commit()
     events = Event.query.filter_by(user_id=current_user.id).order_by(
         Event.date).all()
     upcoming = []
@@ -172,9 +224,17 @@ def calendar():
 @login_required
 def event(formattedDate):
     form = EventForm()
+    body_class = session.get('body_class')
     # choices for the dropdown menu
-    form.colour.choices = [("#ff0000", "Red"), ("357ded", "Blue"), (
-        "#5f8575", "Green"), ("#ff5f1f", "Orange"), ("#7852a9", "Purple")]
+    if body_class == "theme-dark":
+        form.colour.choices = [("#fa7970", "Red"), ("#77bdfb", "Blue"), (
+         "#03dac5", "Green"), ("#faa356", "Orange"), (
+            "#bb86fc", "Purple")]
+    else:
+        # choices for the dropdown menu
+        form.colour.choices = [("#d62237", "Red"), ("#357ded", "Blue"), (
+            "#64bb5c", "Green"), ("#ff5f1f", "Orange"), (
+            "#bb86fc", "Purple")]
     # events = Event.query.filter_by(user_id=current_user.id).all()
     if request.method == "POST":
         action = request.form["action"]
@@ -224,7 +284,7 @@ def event(formattedDate):
 @login_required
 def school_task():
     """Display the school tasks and add tasks to the list"""
-    form = TaskForm()
+    form = TaskForm(type="1")
     # choices for the dropdown menu
     form.type.choices = [(1, "School"), (2, "Personal")]
     form.event.choices = [(event.id, event.name) for event in Event.query.
@@ -294,7 +354,7 @@ def school_task():
 @login_required
 def personal_task():
     """Display the personal tasks and add tasks to the list"""
-    form = TaskForm()
+    form = TaskForm(type="2")
     # choices for the dropdown menu
     form.type.choices = [(1, "School"), (2, "Personal")]
     form.event.choices = [(event.id, event.name) for event in Event.query.
@@ -442,7 +502,7 @@ def today():
                     completed=True).filter_by(user_id=current_user.id).all())
         else:
             # if the user checked off a task by accident,
-            #  they can undo it by unchecking the box
+            # they can undo it by unchecking the box
             undo = request.form.getlist("task_done")
             for task_id in Task.query.with_entities(Task.id).filter_by(
                  completed=True).filter_by(user_id=current_user.id).all():

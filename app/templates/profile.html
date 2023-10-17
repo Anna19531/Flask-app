@@ -12,49 +12,44 @@
             </ul>
         {% endif %}
     {% endwith %}
-
-<p> Username: {{ username_original }} </p>
-<p> Email: {{ email_original }} </p>
+<div class = "margin">
+<div class = "streak">
+    <p> Username: {{ username_original }} </p>
+    <p> Email: {{ email_original }} </p>
+</div>
 
 <h4> Settings </h4>
 
 <form method = "POST" action = "/profile" class = "form">
-    <h4> Change Password </h4>
+    <h6> Change Password </h6>
     <input type = hidden name = "action" value = "password">
-    <input type = password name = "password" placeholder = "New Password"> </input>
-    <input type = password name = "password2" placeholder = "Confirm New Password"> </input>
+    <input type = password  class = "profile_input" name = "password" placeholder = "New Password"> </input>
+    <input type = password class = "profile_input" name = "password2" placeholder = "Confirm New Password"> </input>
+    <br>
     <div>
-        <input type = submit value = "Save" class = "w3-button">
+        <input type = submit value = "Save" class = "w3-btn w3-border">
     </div>
 </form>
 
 <form method = "POST" action = "/profile">
-    <h4> Change Username </h4>
+    <h6> Change Username </h6>
     <input type = hidden name = "action" value = "username">
-    <input type = text name = "username" placeholder = "New Username"> </input>
+    <input type = text class = "profile_input" name = "username" placeholder = "New Username"> </input>
+    <br>
     <div>
-        <input type = submit value = "Save" class = "w3-button">
+        <input type = submit value = "Save" class = "w3-btn w3-border">
     </div>
 </form>
 
 <form method = "POST" action = "/profile">
-    <h4> Change Email </h4>
+    <h6> Change Email </h6>
     <input type = hidden name = "action" value = "email">
-    <input type = email name = "email" placeholder = "New Email"> </input>
+    <input type = email class = "profile_input" name = "email" placeholder = "New Email"> </input>
+    <br>
     <div>
-        <input type = submit value = "Save" class = "w3-button">
+        <input type = submit value = "Save" class = "w3-btn w3-border">
     </div>
 </form>
-
-<br>
-
-<p> Select Theme</p>
-<div class="select">
-    <select class="select__input" id="selTheme" onchange = "applyTheme()">
-        <option value="auto">Auto</option>
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
-    </select>
 </div>
 
 {% endblock %}

@@ -1,6 +1,5 @@
 {% extends "layout.html" %}
 {% block content %}
-<body>
 
     {% with messages = get_flashed_messages(with_categories=true) %} 
         {% if messages %}
@@ -11,28 +10,38 @@
             </ul>
         {% endif %}
     {% endwith %}
+<div class = "margin">
+    <div class = "streak">
+        {% if streak == 1 %}
+            <p> You've been productive for {{ streak }} day!</p>
+        {% else %}
+            <p> You've been productive for {{ streak }} days!</p>
+        {% endif %}
+    </div>
 
-    {% if streak == 1 %}
-        <p> You've been productive for {{ streak }} day!</p>
-    {% else %}
-        <p> You've been productive for {{ streak }} days!</p>
-    {% endif %}
+    <h2 class = "h2">Today's Tasks</h2>
 
-    <h2 class = "h2">Today</h2>
-
-    <h4> Select hours for school and personal tasks </h4>
+   
     <form method = "POST" action = "/today">
+        <p> How long do you want to spend on school and personal tasks today?
+            <br>
+            <br>
         {{ form.csrf_token }}
         {{ form.school.label }} {{ form.school }}
         {{ form.personal.label }} {{ form.personal }}
+        </p>
+        <br>
         <input type = "hidden" name = "action" value = "select">
-        <input type="submit" value="Submit">
+        <div>
+            <input type="submit" value="Submit" class = "w3-btn w3-border">
+        </div>
     </form>
 
-    <h2> Today's Tasks</h2>
+    <br>
 
+    <div class = "flex-container">
     {% if total > 0 %}
-        <h4>Progress</h4>
+    <h4> Progress: </h4>
         <div class = "progress-container">
             <div class = "progress" id = "progress"></div>
             {% for t in range(0, total+1) %}
@@ -40,56 +49,63 @@
             {% endfor %}
         </div>
     {% else %}
-        <p> No tasks today! </p>
+        <p> No tasks today! Add some tasks to see your progress. </p>
     {% endif %}
+    </div>
 
 
     <div class = "flex-container">
-            <div class = "w3-card" style = "width:40%">
+            <div class = "w3-card" style = "width:45%">
                 <h4 class = "w3-container"> School </h4>
-                <table class = "w3-table">
-                    <tr>
-                        <th>Done?</th>
-                        <th>Task</th>
-                        <th>Description</th>
-                        <th>Hours</th>
-                    </tr>
-                    {% for task in school_tasks %}
-
-                    <tr>
-                        <form method = "POST" action = "/today">
-                        <!-- BUGGG - if only personal task in list, can't move to completed -->
-                        <td><input type = "checkbox" class = "checkbox" name = "task" value = "{{ task.id }}"></td>
-                        <label for="{{ task.id }}"><td>{{ task.name }}</td></label>
-                        <td>{{ task.description }}</td>
-                        <td>{{ task.hours }}</td>
-                    </tr>
-                    {% endfor %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Task</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Hours</th>
+                            <th scope="col">Done?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in school_tasks %}
+                        <tr>
+                            <form method = "POST" action = "/today">
+                            <label for="{{ task.id }}"><td scope = "row" label="Task">{{ task.name }}</td></label>
+                            <td data-label="Description">{{ task.description }}</td>
+                            <td data-label="Hours">{{ task.hours }}</td>
+                            <td data-label="Done?"><input type = "checkbox" class = "checkbox" name = "task" value = "{{ task.id }}"></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
 
             <br>
 
                 <h4 class = "w3-container"> Personal </h4>
-                <table class = "w3-table w3-striped">
-                    <tr>
-                        <th>Done?</th>
-                        <th>Task</th>
-                        <th>Description</th>
-                        <th>Hours</th>
-                    </tr>
-                    {% for task in personal_tasks %}
-                    <tr>
-                        <form method = "POST" action = "/today">
-                        <td><input type = "checkbox" class = "checkbox" name = "task" value = "{{ task.id }}"></td>
-                        <label for="{{ task.id }}"><td>{{ task.name }}</td></label>
-                        <td>{{ task.description }}</td>
-                        <td>{{ task.hours }}</td>
-                    </tr>
-                    {% endfor %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Task</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Hours</th>
+                            <th scope="col">Done?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in personal_tasks %}
+                        <tr>
+                            <form method = "POST" action = "/today">
+                            <label for="{{ task.id }}"><td scope = "row" data-label="Task">{{ task.name }}</td></label>
+                            <td data-label="Description">{{ task.description }}</td>
+                            <td data-label="Hours">{{ task.hours }}</td>
+                            <td data-label="Done?"><input type = "checkbox" class = "checkbox" name = "task" value = "{{ task.id }}"></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
                 
         <input type = "hidden" name = "action" value = "done">
-        <input type = "submit" value = "Submit">
+        <input class = "w3-btn w3-border" type = "submit" value = "Submit">
         </form> 
         </div>
 
@@ -97,34 +113,38 @@
         <br>
 
         <br>
-        <div class = "w3-card" style = "width:40%">
+        <div class = "w3-card" style = "width:45%">
             <h4 class = "w3-container"> Completed </h4>
-            <table class = "w3-table w3-striped">
-                <tr>
-                    <th>Done?</th>
-                    <th>Task</th>
-                    <th>Description</th>
-                    <th>Hours</th>
-                </tr>
-                {% for task in completed %}
-                <tr>
-                    <td><form method = "POST" action = "/today"><input type = "checkbox" class = "checkbox" name = "task_done" value = "{{ task.id }}" checked></td>
-                    <label for="{{ task.id }}"><td>{{ task.name }}</td></label>
-                    <td>{{ task.description }}</td>
-                    <td>{{ task.hours }}</td>
-                </tr>
-                {% endfor %}
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Task</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Hours</th>
+                        <th scope="col">Done?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in completed %}
+                    <tr>   
+                        <label for="{{ task.id }}"><td scope = "row" data-label="Task">{{ task.name }}</td></label>
+                        <td data-label="Description">{{ task.description }}</td>
+                        <td data-label="Hours">{{ task.hours }}</td>
+                        <td data-label="Done?"><form method = "POST" action = "/today"><input type = "checkbox" class = "checkbox" name = "task_done" value = "{{ task.id }}" checked></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
             </table>
             
             <input type = "hidden" name = "action" value = "undone">
-            <input type = "submit" value = "Submit">
+            <input type = "submit" value = "Submit" class = "w3-btn w3-border">
             </form> 
         </div>
 
-
         <br>
+        
     </div>
-</body>
+    </div>
 </html>
 {% endblock %}
 

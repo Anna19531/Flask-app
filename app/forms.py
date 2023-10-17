@@ -17,9 +17,9 @@ class EventForm(FlaskForm):
 
 def eventForm(request):
     form = EventForm(request.POST)
-    form.colour.choices = [("ff0000", "Red"), ("#357ded", "Blue"), (
-        "#5f8575", "Green"), ("#ff5f1f", "Orange"), (
-            "#7852a9", "Purple")]
+    form.colour.choices = [("#f2dede", "Red"), ("#357ded", "Blue"), (
+        "#03dac5", "Green"), ("#ff5f1f", "Orange"), (
+            "#bb86fc", "Purple")]
 
 
 # form to add tasks

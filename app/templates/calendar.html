@@ -1,8 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<body>
-
 	<h2 class = "h2"> Calendar </h2>
 
 	{% with messages = get_flashed_messages(with_categories=true) %} 
@@ -15,6 +13,7 @@
 		{% endif %}
 	{% endwith %}
 
+<div class = "margin">
 	<!-- Bug with delete? -->
 	<div class = "wrapper">
 		<header> 
@@ -100,7 +99,7 @@
 					Edit?
 				</th>
 				<td>
-					<button class="open" onclick="openEditForm('{{event.id}}')">Edit</button>
+					<button class="open w3-btn w3-border" onclick="openEditForm('{{event.id}}')">Edit</button>
 					<div class = "form-popup" id = "myEditForm{{ event.id }}">
 						<form method="POST" action="/calendar" class = "form-container">
 							<!-- Set the values for the forms as the information for the event whse edit form is opened -->
@@ -133,13 +132,14 @@
 					<form method = "POST" action = "/calendar">
 						<input type = "hidden" name = "action" value = "delete">
 						<input type = "hidden" name = id value = "{{ event.id }}">
-						<button class = "delete" onclick = "return confirm('Are you sure you want to delete this event?');">Delete</button>
+						<button class = "delete w3-btn w3-border" onclick = "return confirm('Are you sure you want to delete this event?');">Delete</button>
 					</form>
 				</td>
 			</tr>
 		</table>
 		{% endfor %}
 	</div>
-</body>
+</div>
+
 
 {% endblock %}

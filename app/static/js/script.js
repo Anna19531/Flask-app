@@ -1,9 +1,39 @@
+var bodyClass = document.body.className;
+
 // function to toggle between light and dark mode
 function applyTheme(theme) {
     document.body.classList.remove("theme-auto", "theme-light", "theme-dark", "theme-undefined");
     document.body.classList.add(`theme-${theme}`);
+    var bodyClass = document.body.className;
     document.documentElement.setAttribute("theme", `theme-${theme}`);
+    
+    // Create a new XMLHttpRequest object
+    var xhr = new XMLHttpRequest();
+
+    // Define the request method, URL, and set it to be asynchronous
+    xhr.open("POST", "/endpoint", true);
+
+    // Set the request header if needed (e.g., if sending data as JSON)
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+    // Define a callback function to handle the response from the server
+    xhr.onreadystatechange = function () {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+        console.log("Server response:", xhr.responseText);
+        } else {
+        console.error("Error: " + xhr.status);
+        }
+    }
+    };
+    // Prepare the data to be sent (in this case, as a JSON string)
+    var data = JSON.stringify({ bodyClass: bodyClass });
+
+    // Send the request with the data
+    xhr.send(data);
 }
+
+console.log(document.body.className)
 
 document.addEventListener("DOMContentLoaded", () => {
     const savedTheme = localStorage.getItem("theme") || "auto";
@@ -19,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
     applyTheme(this.value);
     });
 });
-
 
 const daysTag = document.querySelector(".days"),
 currentDate = document.querySelector(".current-date"),
@@ -56,7 +85,6 @@ function getEventColour(day, events) {
         return eventDay === day && eventMonth === currMonth && eventYear === currYear;
         
     });
-    console.log(event ? event.colour : "")
     return event ? event.colour : "";
     }
 
@@ -159,7 +187,6 @@ function openForm() {
 // If I have time: close other forms when one is opened
 function openEditForm(eventID) {
     var formID = "myEditForm" + eventID;
-    console.log(formID)
     document.getElementById(formID).style.display = "block";
   }
 
@@ -169,19 +196,16 @@ function closeForm() {
 
 function closeEditForm(eventID) {
     var formID = "myEditForm" + eventID;
-    console.log(formID)
     document.getElementById(formID).style.display = "none";
   }
 
 function openTaskEditForm(taskID) {
     var formID = "myEditForm" + taskID;
-    console.log(formID)
     document.getElementById(formID).style.display = "block";
 }
 
 function closeTaskEditForm(taskID) {
     var formID = "myEditForm" + taskID;
-    console.log(formID)
     document.getElementById(formID).style.display = "none";
 }
 
