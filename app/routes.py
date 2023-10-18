@@ -106,7 +106,7 @@ def home():
 @login_required
 def dashboard():
     # events to be displayed
-    events = Event.query.filter_by(user_id=current_user.get_id).order_by(
+    events = Event.query.filter_by(user_id=current_user.id).order_by(
         Event.date).all()
     upcoming = []
     for event in events:
@@ -114,9 +114,9 @@ def dashboard():
             upcoming.append(event)
     # tasks to be displayed
     school_tasks = Task.query.filter_by(today=True).filter_by(
-        user_id=current_user.get_id).filter_by(type=1).order_by(Task.date).all()
+        user_id=current_user.id).filter_by(type=1).order_by(Task.date).all()
     personal_tasks = Task.query.filter_by(today=True).filter_by(
-        user_id=current_user.get_id).filter_by(type=2).order_by(Task.date).all()
+        user_id=current_user.id).filter_by(type=2).order_by(Task.date).all()
     # display user streak
     streak = current_user.streak
     return render_template("dashboard.html", upcoming=upcoming,
@@ -134,7 +134,7 @@ def calendar():
         form.colour.choices = [("#fa7970", "Red"), ("#77bdfb", "Blue"), (
          "#03dac5", "Green"), ("#ffffff", "White"), (
             "#7852a9", "Purple")]
-        colours = Event.query.filter_by(user_id=current_user.get_id).all()
+        colours = Event.query.filter_by(user_id=current_user.id).all()
         for colour in colours:
             if colour.colour == "#d62237":
                 colour.colour = "#fa7970"
@@ -156,7 +156,7 @@ def calendar():
         form.colour.choices = [("#d62237", "Red"), ("#1c448e", "Blue"), (
             "#006400", "Green"), ("#000000", "Black"), (
             "#bb86fc", "Purple")]
-        colours = Event.query.filter_by(user_id=current_user.get_id).all()
+        colours = Event.query.filter_by(user_id=current_user.id).all()
         for colour in colours:
             if colour.colour == "#fa7970":
                 colour.colour = "#d62237"
@@ -173,7 +173,7 @@ def calendar():
             elif colour.colour == "#bb86fc":
                 colour.colour = "#7852a9"
                 db.session().commit()
-    events = Event.query.filter_by(user_id=current_user.get_id).order_by(
+    events = Event.query.filter_by(user_id=current_user.id).order_by(
         Event.date).all()
     upcoming = []
     for event in events:
@@ -189,7 +189,7 @@ def calendar():
             new_event.description = form.description.data
             new_event.date = form.date.data
             new_event.colour = form.colour.data
-            new_event.user_id = current_user.get_id
+            new_event.user_id = current_user.id
             db.session().add(new_event)
             db.session().commit()
             flash("Event added :)", "success")
@@ -203,7 +203,7 @@ def calendar():
             event.description = form.description.data
             event.date = form.date.data
             event.colour = form.colour.data
-            event.user_id = current_user.get_id
+            event.user_id = current_user.id
             db.session().commit()
             flash("Event edited :)", "success")
             return redirect(url_for("calendar"))
@@ -246,7 +246,7 @@ def event(formattedDate):
             new_event.description = form.description.data
             new_event.date = form.date.data
             new_event.colour = form.colour.data
-            new_event.user_id = current_user.get_id
+            new_event.user_id = current_user.id
             db.session().add(new_event)
             db.session().commit()
             flash("Event added :)", "success")
@@ -260,7 +260,7 @@ def event(formattedDate):
             event.description = form.description.data
             event.date = form.date.data
             event.colour = form.colour.data
-            event.user_id = current_user.get_id
+            event.user_id = current_user.id
             db.session().commit()
             flash("Event edited :)", "success")
             return redirect(url_for("calendar"))
@@ -275,7 +275,7 @@ def event(formattedDate):
             return redirect(url_for("calendar"))
 
     events = Event.query.filter_by(date=formattedDate).filter_by(
-        user_id=current_user.get_id).all()
+        user_id=current_user.id).all()
     return render_template(
         "days.html", formattedDate=formattedDate, form=form, events=events)
 
@@ -288,23 +288,23 @@ def school_task():
     # choices for the dropdown menu
     form.type.choices = [(1, "School"), (2, "Personal")]
     form.event.choices = [(event.id, event.name) for event in Event.query.
-                          filter_by(user_id=current_user.get_id).all()]
+                          filter_by(user_id=current_user.id).all()]
     form.event.choices.append((0, "Other"))
     # filter the tasks based on their date
     # urgent tasks are due within 3 days of the current date
     urgent = Task.query.filter_by(type="1").filter(
         Task.date <= date.today() + timedelta(days=3)).filter_by(
-        user_id=current_user.get_id).order_by(Task.date).all()
+        user_id=current_user.id).order_by(Task.date).all()
     # coming up tasks are due within 3-7 days of the current date
     coming_up = Task.query.filter_by(type="1").filter(
         date.today() + timedelta(days=3) < Task.date).filter_by(
-        user_id=current_user.get_id).filter(
+        user_id=current_user.id).filter(
             Task.date <= date.today() + timedelta(days=7)).order_by(
                 Task.date).all()
     # not urgent tasks are due more than 7 days from the current date
     not_urgent = Task.query.filter_by(type="1").filter(
         date.today() + timedelta(days=7) < Task.date).filter_by(
-        user_id=current_user.get_id).order_by(Task.date).all()
+        user_id=current_user.id).order_by(Task.date).all()
     if request.method == "POST":
         action = request.form["action"]
         # adding a new task
@@ -317,7 +317,7 @@ def school_task():
             new_task.type = form.type.data
             new_task.event_id = form.event.data
             new_task.hours = form.hours.data
-            new_task.user_id = current_user.get_id
+            new_task.user_id = current_user.id
             db.session().add(new_task)
             db.session().commit()
             flash("Task added :)", "success")
@@ -333,7 +333,7 @@ def school_task():
             task.type = form.type.data
             task.event_id = form.event.data
             task.hours = form.hours.data
-            task.user_id = current_user.get_id
+            task.user_id = current_user.id
             db.session().commit()
             flash("Task edited :)", "success")
             return redirect(url_for("school_task"))
@@ -358,20 +358,20 @@ def personal_task():
     # choices for the dropdown menu
     form.type.choices = [(1, "School"), (2, "Personal")]
     form.event.choices = [(event.id, event.name) for event in Event.query.
-                          filter_by(user_id=current_user.get_id).all()]
+                          filter_by(user_id=current_user.id).all()]
     form.event.choices.append((0, "Other"))
     # filter Tasks by events that have a date
     # within 3 days of the current date and by the user logged in
     urgent = Task.query.filter_by(type="2").filter(
         Task.date <= date.today() + timedelta(days=3)).filter_by(
-            user_id=current_user.get_id).order_by(Task.date).all()
+            user_id=current_user.id).order_by(Task.date).all()
     coming_up = Task.query.filter_by(type="2").filter(
         date.today() + timedelta(days=3) < Task.date).filter(
             Task.date <= date.today() + timedelta(days=7)).filter_by(
-                user_id=current_user.get_id).order_by(Task.date).all()
+                user_id=current_user.id).order_by(Task.date).all()
     not_urgent = Task.query.filter_by(type="2").filter(
         date.today() + timedelta(days=7) < Task.date).filter_by(
-            user_id=current_user.get_id).order_by(Task.date).all()
+            user_id=current_user.id).order_by(Task.date).all()
     if request.method == "POST":
         action = request.form["action"]
         # adding a new task
@@ -384,7 +384,7 @@ def personal_task():
             new_task.type = form.type.data
             new_task.event_id = form.event.data
             new_task.hours = form.hours.data
-            new_task.user_id = current_user.get_id
+            new_task.user_id = current_user.id
             db.session().add(new_task)
             db.session().commit()
             flash("Task added :)", "success")
@@ -400,7 +400,7 @@ def personal_task():
             task.type = form.type.data
             task.event_id = form.event.data
             task.hours = form.hours.data
-            task.user_id = current_user.get_id
+            task.user_id = current_user.id
             db.session().commit()
             flash("Task edited :)", "success")
             return redirect(url_for("personal_task"))
@@ -427,7 +427,7 @@ def today():
     streak = current_user.streak
     total = current_user.total
     completed_tasks = len(Task.query.filter_by(completed=True).filter_by(
-        user_id=current_user.get_id).all())
+        user_id=current_user.id).all())
     if request.method == "POST":
         action = request.form["action"]
         # selecting hours
@@ -436,7 +436,7 @@ def today():
             # streak tracker
             # checking if all tasks for today have been completed
             completed = Task.query.filter_by(completed=True).filter_by(
-                user_id=current_user.get_id).all()
+                user_id=current_user.id).all()
             print(len(completed))
             print(total)
             if len(completed) != 0 and len(completed) == total:
@@ -451,7 +451,7 @@ def today():
                 db.session().commit()
             # deleting the completed tasks
             for task in Task.query.filter_by(completed=True).filter_by(
-                 user_id=current_user.get_id).all():
+                 user_id=current_user.id).all():
                 db.session().delete(task)
                 db.session().commit()
             completed = []
@@ -465,7 +465,7 @@ def today():
                 school_hours = 0
             if personal_hours is None:
                 personal_hours = 0
-            if len(Task.query.filter_by(user_id=current_user.get_id).all()) == 0:
+            if len(Task.query.filter_by(user_id=current_user.id).all()) == 0:
                 flash("Please add some tasks to do", "error")
             else:
                 for task in Task.query.order_by(Task.date).filter_by(
