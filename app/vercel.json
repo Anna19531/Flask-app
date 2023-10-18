@@ -11,5 +11,9 @@
             "src": "(.*)",
             "dest": "flask_app.py"
         }
-    ]
+    ],
+
+    "rewrites": [
+        { "source": "/(.*)", "destination": "/" }
+      ]
   }

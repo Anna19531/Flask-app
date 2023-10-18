@@ -389,7 +389,7 @@ header .current-date{
 
 @media all and (max-width: 720px) {
   .navbar {
-    /* When on medium sized screens, we center it by evenly distributing empty space around items */
+    /* When on small sized screens, we center it by evenly distributing empty space around items */
     justify-content: space-around;
     flex-direction: column;
   } 
