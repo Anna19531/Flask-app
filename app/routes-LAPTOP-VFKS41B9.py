@@ -34,7 +34,7 @@ def object_as_dict(obj):
 @app.route("/data.json")
 def serve_js():
     """Send the events data to the Javascript file"""
-    events = Event.query.filter_by(user_id=current_user.id).all()
+    events = Event.query.filter_by(user_id=current_user.get_id).all()
     return jsonify([object_as_dict(event) for event in events])
 
 
@@ -469,7 +469,7 @@ def today():
                 flash("Please add some tasks to do", "error")
             else:
                 for task in Task.query.order_by(Task.date).filter_by(
-                 user_id=current_user.id).all():
+                 user_id=current_user.get_id).all():
                     # reset all tasks to False i.e. not today's task
                     task.today = False
                     db.session().commit()
@@ -486,7 +486,7 @@ def today():
                             task.today = True
                             db.session().commit()
                 total = len(Task.query.filter_by(today=True).filter_by(
-                    user_id=current_user.id).all())
+                    user_id=current_user.get_id).all())
                 current_user.total = total
                 db.session().commit()
             return redirect(url_for("today"))
@@ -499,13 +499,13 @@ def today():
                 task.completed = True
                 db.session().commit()
                 completed_tasks = len(Task.query.filter_by(
-                    completed=True).filter_by(user_id=current_user.id).all())
+                    completed=True).filter_by(user_id=current_user.get_id).all())
         else:
             # if the user checked off a task by accident,
             # they can undo it by unchecking the box
             undo = request.form.getlist("task_done")
             for task_id in Task.query.with_entities(Task.id).filter_by(
-                 completed=True).filter_by(user_id=current_user.id).all():
+                 completed=True).filter_by(user_id=current_user.get_id).all():
                 # task_id is a tuple
                 if str(task_id[0]) not in undo:
                     task = Task.query.filter_by(id=task_id[0]).one()
@@ -513,13 +513,13 @@ def today():
                     task.completed = False
                     db.session().commit()
             completed_tasks = len(Task.query.filter_by(
-                completed=True).filter_by(user_id=current_user.id).all())
+                completed=True).filter_by(user_id=current_user.get_id).all())
     school_tasks = Task.query.filter_by(today=True).filter_by(
-        user_id=current_user.id).filter_by(type=1).order_by(Task.date).all()
+        user_id=current_user.get_id).filter_by(type=1).order_by(Task.date).all()
     personal_tasks = Task.query.filter_by(today=True).filter_by(
-        user_id=current_user.id).filter_by(type=2).order_by(Task.date).all()
+        user_id=current_user.get_id).filter_by(type=2).order_by(Task.date).all()
     completed = Task.query.filter_by(completed=True).filter_by(
-        user_id=current_user.id).all()
+        user_id=current_user.get_id).all()
     return render_template("today.html", form=form, school_tasks=school_tasks,
                            personal_tasks=personal_tasks, completed=completed,
                            streak=streak, total=total,
@@ -545,7 +545,7 @@ def profile():
             password2 = request.form["password2"]
             # checking if the input password and confirm password match
             if password == password2:
-                user = User.query.get(current_user.id)
+                user = User.query.get(current_user.get_id)
                 # hash new password
                 user.password = generate_password_hash(
                     password, method="scrypt")
@@ -564,7 +564,7 @@ def profile():
                     "Username already taken, please use another one", "error")
                 username = username_original
             else:
-                user = User.query.get(current_user.id)
+                user = User.query.get(current_user.get_id)
                 user.username = username
                 db.session().commit()
                 flash("Username changed :)", "success")
@@ -577,7 +577,7 @@ def profile():
             if email in [user.email for user in User.query.all()]:
                 flash("Email already taken, please use another one", "error")
             else:
-                user = User.query.get(current_user.id)
+                user = User.query.get(current_user.get_id)
                 user.email = email
                 db.session().commit()
                 flash("Email changed :)", "success")

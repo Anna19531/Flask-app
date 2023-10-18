@@ -391,6 +391,7 @@ header .current-date{
   .navbar {
     /* When on medium sized screens, we center it by evenly distributing empty space around items */
     justify-content: space-around;
+    flex-direction: column;
   } 
 
   .flex-container {
@@ -411,20 +412,6 @@ header .current-date{
     align-items: center;
   }
 }
-
-/* Small screens */
-@media all and (max-width: 600px) {
-  .navbar {
-    /* On small screens, we are no longer using row direction but column */
-    flex-direction: column;
-  }
-
-  .open-button {
-    top: 400px;
-    bottom: 10px;
-  }
-}
-
 
 /* Tables */
 
