@@ -175,6 +175,12 @@ def calendar():
                 db.session().commit()
     events = Event.query.filter_by(user_id=current_user.id).order_by(
         Event.date).all()
+    for event in events:
+        if event.date < date.today():
+            db.session.delete(event)
+            db.session().commit()
+    events = Event.query.filter_by(user_id=current_user.id).order_by(
+        Event.date).all()
     upcoming = []
     for event in events:
         if len(upcoming) < 3:
@@ -437,8 +443,6 @@ def today():
             # checking if all tasks for today have been completed
             completed = Task.query.filter_by(completed=True).filter_by(
                 user_id=current_user.id).all()
-            print(len(completed))
-            print(total)
             if len(completed) != 0 and len(completed) == total:
                 current_user.streak += 1
                 streak = current_user.streak
@@ -540,7 +544,6 @@ def profile():
         action = request.form['action']
         # changing password
         if action == "password":
-            print("password")
             password = request.form["password"]
             password2 = request.form["password2"]
             # checking if the input password and confirm password match
@@ -548,7 +551,7 @@ def profile():
                 user = User.query.get(current_user.id)
                 # hash new password
                 user.password = generate_password_hash(
-                    password, method="scrypt")
+                    password, method="sha256")
                 db.session().commit()
                 flash("Password changed :)", "success")
             else:

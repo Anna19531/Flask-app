@@ -15,9 +15,10 @@
   --border: #22303c;
   --calendar-li: #333;
   --calendar-background: #ffffff;
-  --highlight: #aaa;
+  --highlight: #f2f2f2;
   --input-field-color: #ffffff;
   --select-text: #333;
+  --icon: #333;
 }
 
 /* Colour palette for dark theme */
@@ -31,6 +32,7 @@
   --calendar-background: #22303c;
   --highlight: #808080;
   --select-text: ##357ded;
+  --icon:#808080;
   /* --input-field-color: #424242; */
 }
 
@@ -102,7 +104,7 @@ header .icons span{
   width: 38px;
   margin: 0 1px;
   cursor: pointer;
-  color: var(--highlight);
+  color: var(--icon);
   text-align: center;
   line-height: 38px;
   font-size: 1.9rem;
