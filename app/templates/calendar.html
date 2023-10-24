@@ -91,13 +91,22 @@
 					Colour:
 				</th>
 				<td>
-					{{ event.colour }}
+					{% if event.colour == "#000000" %}
+						<p>Black</p>
+					{% elif event.colour == "#ffffff" %}
+						<p> Red</p>	
+					{% elif event.colour == "#d62237" or event.colour == "#fa7970" %}
+						<p> Red</p>
+					{% elif event.colour == "#77bdfb" or event.colour == "#1c448e" %}
+						<p> Blue</p>	
+					{% elif event.colour == "#03dac5" or event.colour == "#006400" %}
+						<p> Green</p>
+					{% elif event.colour == "#7852a9" or event.colour == "#bb86fc" %}
+						<p> Purple</p>
+					{% endif %}
 				</td>
 			</tr>
 			<tr>
-				<th>
-					Edit?
-				</th>
 				<td>
 					<button class="open w3-btn w3-border" onclick="openEditForm('{{event.id}}')">Edit</button>
 					<div class = "form-popup" id = "myEditForm{{ event.id }}">
@@ -125,9 +134,6 @@
 						</form>
 					</div>
 				</td>
-				<th>
-					Delete?
-				</th>
 				<td> 
 					<form method = "POST" action = "/calendar">
 						<input type = "hidden" name = "action" value = "delete">
